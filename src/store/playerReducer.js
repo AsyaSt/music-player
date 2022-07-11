@@ -55,31 +55,9 @@ export const actionFullPlay = () =>
     dispatch => {  
         audio.play();
         dispatch(actionPlay());
-        dispatch(actionFullGetDuration(msToTime(audio.duration)))
+        dispatch(actionFullGetDuration(audio.duration))
     }
 
-
-// let audio = new Audio();
-// const actionPlay = () => ({type:'PLAY'})
-// export const actionFullPlay = () =>
-//     dispatch => {  
-//         audio.play();
-//         dispatch(actionPlay());
-//         dispatch(actionFullGetDuration(msToTime(audio.duration)))
-//     }
-
-function msToTime(duration) {
-    let hours,minutes,seconds;
-    hours = Math.floor(duration / 3600);
-    minutes = Math.floor((duration - 3600 * hours) / 60);
-    seconds = Math.floor((duration - 3600 * hours - 60 * minutes) % 60);
-    
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-    
-    return minutes + ":" + seconds;
-    }
 
 
 const actionPause = () => ({type:'PAUSE'})
@@ -102,7 +80,6 @@ export const actionFullSetTrack = (track) =>
         //audio.src = `http://player-api/storage/tracks/${track.file}`;
         dispatch(actionSetTrack(track));
         dispatch(actionFullPlay());
-        dispatch(actionFullGetDuration(msToTime(audio.duration)));  
     }
 
 const actionGetDuration = (duration) => ({type:'GET_DURATION', duration})

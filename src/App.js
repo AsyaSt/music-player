@@ -9,7 +9,8 @@ import {Provider, connect}   from 'react-redux';
 import { store } from './store/store';
 import { actionAllPlaylists } from './store/promiseReducer';
 import { actionFullSetPlaylist } from './store/playerReducer';
-import {LoginForm, RegisterForm} from './components/authorization'
+import {CLoginForm} from './components/authorization'
+import {CRegisterForm} from './components/authRegistration'
 import {CreatePlaylist} from './components/createPlaylist'
 
 import { Header } from './components/header';
@@ -64,8 +65,10 @@ const Main = ({children}) =>
       <Content>
         <Switch>
           {store.getState().auth?.token && <Redirect from='/login' to={'/user'} exact />} 
-          <Route path={'/login'} component={LoginForm} />
-          <Route path={'/register'} component={RegisterForm}/>
+          {store.getState().auth?.token && <Redirect from='/register' to={'/user'} exact />} 
+          {!store.getState().auth?.token && <Redirect from='/user' to={'/login'} exact />}
+          <Route path={'/login'} component={CLoginForm} />
+          <Route path={'/register'} component={CRegisterForm}/>
 
           <Route path={'/allplaylists'} component={Aside}/>
           <Route path={'/playlist'} component={CPlaylistById} />

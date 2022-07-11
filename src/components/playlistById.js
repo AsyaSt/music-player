@@ -81,8 +81,9 @@ const Track = ({track: {name, file, id3, id} = {} }, key) =>
 <tr>
     <th scope="row">{i++}</th>
     <td>          
-        <button onClick={async() => {
-            await (() => audio.src = `http://player-api/storage/tracks/${file}`)();
+        <button onClick={() => {
+            audio.src = `http://player-api/storage/tracks/${file}`;
+                
             store.dispatch(actionFullSetTrack({name, file, id3, id}));
             store.dispatch(actionFullPlay());
         }}>

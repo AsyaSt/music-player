@@ -25,14 +25,16 @@ export const Header = ({children}) =>
             <input className="form-control me-2 " type="search" placeholder="Search" aria-label="Search"/>
         
         </div>
-        <div className="d-flex">
-            <img alt='///' className='logoimg' src={image}/>
             <CLogout/>
-        </div>
+        
     </div>
   </nav>
   {children}
 </header>
 
-const CLogout = connect(state => ({children: `Logout (${state.auth.user?.login || 'anon'})`}), 
+const ImgLogout = () => {
+    return <img alt='///' className='logoimg' src={logoutimg}/>
+}
+
+const CLogout = connect(state => ({children: <ImgLogout/>}), 
                                               {onClick: actionAuthLogout})('button')

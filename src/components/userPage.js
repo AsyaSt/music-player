@@ -108,7 +108,7 @@ const [modalShow, setModalShow] = React.useState(false);
         onHide={() => setModalShow(false)}
       />
 
-    <h3>My playlists</h3>
+    <h3>My playlists:</h3>
     <СUsersPlaylists/>
 
     </>)
