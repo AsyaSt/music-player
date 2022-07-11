@@ -4,6 +4,10 @@ import logoutimg from '../images/logout.png';
 import {connect}   from 'react-redux';
 import { actionAuthLogout } from '../store/authReducer';
 
+import React from 'react';
+const REACT_VERSION = React.version;
+
+
 
 export const Header = ({children}) => 
 <header id="header">

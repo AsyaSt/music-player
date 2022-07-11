@@ -16,10 +16,11 @@ import {CreatePlaylist} from './components/createPlaylist'
 import { Header } from './components/header';
 import { UserPage, UsersPlaylistsAll } from './components/userPage';
 import {PlaylistById}  from './components/playlistById';
+import { BrowserRouter } from "react-router-dom";
 
 
 
-let history = createHistory()
+export let history = createHistory()
 
 store.subscribe(() => console.log(store.getState()));
 store.dispatch(actionAllPlaylists());
@@ -56,12 +57,9 @@ const Aside = ({children}) =>
     <СAllPlaylists/>
   </div>
 
-
-
-
 const Main = ({children}) =>
   <main className='bg-dark text-white'>
-  <Router history = {createHistory()}>
+  <BrowserRouter history = {history}>
       <Content>
         <Switch>
           {store.getState().auth?.token && <Redirect from='/login' to={'/user'} exact />} 
@@ -79,8 +77,32 @@ const Main = ({children}) =>
         
         {/* {children} */}
       </Content>
-    </Router>
+    </BrowserRouter>
   </main>
+
+
+// const Main = ({children}) =>
+//   <main className='bg-dark text-white'>
+//   <Router history = {history}>
+//       <Content>
+//         <Switch>
+//           {store.getState().auth?.token && <Redirect from='/login' to={'/user'} exact />} 
+//           {store.getState().auth?.token && <Redirect from='/register' to={'/user'} exact />} 
+//           {!store.getState().auth?.token && <Redirect from='/user' to={'/login'} exact />}
+//           <Route path={'/login'} component={CLoginForm} />
+//           <Route path={'/register'} component={CRegisterForm}/>
+
+//           <Route path={'/allplaylists'} component={Aside}/>
+//           <Route path={'/playlist'} component={CPlaylistById} />
+//           <Route path={'/create'} component={CreatePlaylist} />
+//           <Route path={'/user'} component={UserPage} />
+//           {/* <Route path={'/'} component={Header} /> */}
+//         </Switch>
+        
+//         {/* {children} */}
+//       </Content>
+//     </Router>
+//   </main>
 
 const Content = ({children}) => 
   <section className='Content'>
