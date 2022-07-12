@@ -7,7 +7,6 @@ import {history} from '../App';
 
 
 
-
 async function SendForm (url, data) {
 
 
@@ -15,11 +14,11 @@ async function SendForm (url, data) {
       method: 'POST',
       body: data
     }).then(res => res.json())
-    .then(data => {
+    .then((data) => {
         if(data.token) {
-          store.dispatch(actionAuthLogin(data.token, data.user));
-          //console.log(history)
           history.push('/user');
+          store.dispatch(actionAuthLogin(data.token, data.user));
+
           return data
         } else {
           return data.message;
@@ -66,5 +65,5 @@ export const LoginForm = ({authState}) => {
     </>
   }
 
-  export const CLoginForm = connect(state => ({ authState: state.auth?.token }))(LoginForm);
+  //export const CLoginForm = connect(state => ({ authState: state.auth?.token }))(LoginForm);
   
