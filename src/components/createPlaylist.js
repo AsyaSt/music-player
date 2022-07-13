@@ -55,7 +55,7 @@ export const CreatePlaylist = (props) => {
                   <label  className="form-label">Image</label>
                   <input type="file" name="picture" accept="image/*" id="file" className='form-control mb-3' onChange={(e) => setImage(e.target.files[0])} multiple={false}/>
                   <input className="form-check-input me-3" type="checkbox" id="flexCheckIndeterminate" checked={privat} onChange={e => setPrivat(e.target.checked? 1 : 0)}/>
-                  <label className="form-check-label" for="flexCheckIndeterminate">Private?</label>    
+                  <label className="form-check-label" >Private?</label>    
               </div>
               <div className="w-50">
                   <label  className="form-label">Name</label><br/>

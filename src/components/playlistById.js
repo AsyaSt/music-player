@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import { ReactDOM } from 'react';
 import { store } from '../store/store';
 import { actionPlaylistById} from '../store/promiseReducer';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {Provider, connect}   from 'react-redux';
-import { actionFullSetTrack, actionFullPlay} from '../store/playerReducer';
+// import {connect}   from 'react-redux';
+// import {actionFullSetTrack, actionFullPlay} from '../store/playerReducer';
 import { Header } from './header';
 import { СNowPlayingPlayer } from './playing';
+import {СAllTracks } from './Tracks'
 
 
 
@@ -33,7 +33,7 @@ function sendForm (url, data) {
 
 
 
-function ShowModal  (props)  {
+function LoadTrackModal  (props)  {
     const [tracks, setTrack] = useState(null);
 
     const PostLoadTracks = async(event)  =>{
@@ -74,46 +74,6 @@ return(
      </Modal.Footer>
   </Modal>)
 }
-let i =1;
-export let audio = new Audio();
-const Track = ({track: {name, file, id3, id} = {} }, key) => 
-    
-<tr>
-    <th scope="row">{i++}</th>
-    <td>          
-        <button onClick={() => {
-            audio.src = `http://player-api/storage/tracks/${file}`;
-                
-            store.dispatch(actionFullSetTrack({name, file, id3, id}));
-            store.dispatch(actionFullPlay());
-        }}>
-            {name}
-        </button>
-    </td>
-    <td>
-        <a href='#/artist'>{id3.artist}</a>
-    </td>
-    <td>{id3.getAlbum}</td>
-</tr>
-
-
-const TracksAll = ({tracks=[]}) => 
-    <table className="table table-dark table-striped table-dark table-hover">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Track name</th>
-                <th scope="col">Artist</th>
-                <th scope="col">Album</th>
-            </tr>
-    </thead>
-        <tbody>
-            {tracks.map((tracks, i) => <Track key={i} track={tracks}/>)}
-        </tbody>
-    </table>
-
-const СAllTracks = connect(state => ({tracks: state.promise.plstById?.payload?.tracks || []}), )(TracksAll);
-
 
 export const PlaylistById = ({playlist = {}}) => {
     let id = window.location.href.split('/')[4];
@@ -127,6 +87,7 @@ export const PlaylistById = ({playlist = {}}) => {
     }, []);
 
     const [modalShow, setModalShow] = React.useState(false);
+    const [modalTrackShow, setModalTrackShow] = React.useState(false);
   
   return(
     <>
@@ -139,13 +100,15 @@ export const PlaylistById = ({playlist = {}}) => {
                 <img src={playlist.photo} width ='250px' alt='...'/>
             </div>
             <div>
-                <p className='h4'>Название плейлиста: {playlist.name}</p>
-                <p>Автор плейлиста: {playlist.user_name}</p>
-                
+                <p className='h4'>Playlist name: {playlist.name}</p>
+                <p>Playlist author: {playlist.user_name}</p>
+                <span onClick={() => setModalTrackShow(true)}>Edit Playlist</span>
+                <EditPlaylistModal  show={modalTrackShow} playlist={playlist}
+                        onHide={() => setModalTrackShow(false)}></EditPlaylistModal>
                 <p>{playlist?.tracks?.length} треков</p> 
                 <div className='d-flex'>
-                <div> <button type="button" className="btn btn-light me-2">Перемешать</button></div>
-                <div> <button type="button" className="btn btn-light">Добавить в библиотеку</button></div>
+                {/* <div> <button type="button" className="btn btn-light me-2">Shake</button></div> */}
+                {/* <div> <button type="button" className="btn btn-light">Добавить в библиотеку</button></div> */}
                 </div>
                 {playlist.user_id === store.getState().auth.user.id? 
                 (<>
@@ -153,7 +116,8 @@ export const PlaylistById = ({playlist = {}}) => {
                         Add Tracks
                     </Button>
 
-                    <ShowModal
+                    <LoadTrackModal
+                        
                         show={modalShow}
                         onHide={() => setModalShow(false)}
                     /></>) : <></>}
@@ -168,3 +132,63 @@ export const PlaylistById = ({playlist = {}}) => {
       
       </>
   )}
+
+
+  function EditPlaylistModal  (props)  {
+    const [name, setName] = useState(props.playlist?.name);
+    const [description, setDescription] = useState(props.playlist?.description);
+    //const [privat, setPrivat] = useState(0);
+    const [image, setImage] = useState(props.playlist?.photo);
+
+    const PostEditPlaylist = async(event)  =>{
+        event.preventDefault();
+        const data = new FormData();
+
+        data.append("name", name || props.playlist?.name);
+        data.append("description", description || props.playlist?.description);
+        data.append("private", props.playlist?.private);
+        data.append("photo",  image, (image.name?  image.name : props.playlist?.photo));
+
+        sendForm('playlists/' + props.playlist?.id + '/edit', data);  
+    }
+
+    return(
+    <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+    >
+        <Modal.Header closeButton> 
+        <Modal.Title id="contained-modal-title-vcenter">
+        Add Tracks
+        </Modal.Title> 
+        </Modal.Header>
+        <Modal.Body >
+        <form onSubmit={PostEditPlaylist} className="authorization center align-items-center justify-content-center  d-flex" id='loadTracksForm'>
+        <div className="border p-3 col-9">
+        <h4 className="w-100 text-center">Create Playlist</h4>
+            <hr/>
+            <div className="d-flex justify-content-between">
+              <div className="w-auto">
+                  <label  className="form-label">Image</label>
+                  <input type="file" name="picture" accept="image/*" id="file" className='form-control mb-3' onChange={(e) => setImage(e.target.files[0])} multiple={false}/>
+                  {/* <input className="form-check-input me-3" type="checkbox" id="flexCheckIndeterminate" checked={privat} onChange={e => setPrivat(e.target.checked? 1 : 0)}/>
+                  <label className="form-check-label" >Private?</label>     */}
+              </div>
+              <div className="w-50">
+                  <label  className="form-label">Name</label><br/>
+                  <input type="text" id="username" className='input form-control mb-3' value={name} onChange={e => setName(e.target.value)}/>
+                  <label  className="form-label">Description</label>
+                  <textarea type="password" id="password" className='form-control mb-3' value={description} onChange={e => setDescription(e.target.value)}/>
+              </div>
+            </div>
+            <button type='submit' className="btn btn-outline-danger" onClick={props.onHide} >Create</button>
+        </div>
+        </form>
+        </Modal.Body>
+        <Modal.Footer> 
+        <Button variant="outline-danger" type='submit' form='loadTracksForm' onClick={props.onHide}>Save</Button> 
+        </Modal.Footer>
+    </Modal>)
+}

@@ -4,6 +4,7 @@ import {faVolumeDown, faVolumeUp, faRandom, faStepBackward, faStopCircle, faStep
 import { store } from '../store/store';
 import {actionFullGetDuration, actionFullSetTrack, actionFullPlay, actionFullPause, actionFullSetVolume, actionFullSetCurrentTime } from '../store/playerReducer';
 import {Provider, connect}   from 'react-redux';
+import { audio } from './Tracks';
 
 function msToTime(duration) {
     let hours,minutes,seconds;
@@ -19,14 +20,13 @@ function msToTime(duration) {
     }
 
 export let NowPlayingPlayer = (props) => {
-    const [volume, setVolume] = useState(10);
-    // let duration;
+    const [volume, setVolume] = useState(20);
+    const [newCurrent, setNewCurrent] = useState(0)
 
-    // useEffect(() => {
-    //     if (!store.getState().player?.duration) {
-    //         duration = msToTime(store.getState()?.player?.track?.src?.duration)
-    //     }
-    // }, []);
+    audio.ontimeupdate = () =>  store.dispatch(actionFullSetCurrentTime(audio.currentTime));
+    useEffect(() => {
+        if (props.currentTime) audio.currentTime = newCurrent
+    }, [newCurrent])
 
 return(
 <div className="player">
@@ -39,12 +39,18 @@ return(
         </div>
 
         <div className="slider-container duration">
-            <span className="current-time">00:00</span>
-            <input type='range' min={1} max='100' value='0' className="seek-slider" 
-            // onChange={(e) => setDuration(e.target.value)}
+            <span className="current-time">{props.currentTime ? 
+            `0${((props.currentTime - props.currentTime % 60) / 60 % 60).toFixed() !== 'NaN' ? 
+            ((props.currentTime - props.currentTime % 60) / 60 % 60).toFixed() : '0'}:${(props.currentTime % 60).toFixed() > 9 ?
+             '' : '0'}${(props.currentTime % 60).toFixed() !== 'NaN' ? (props.currentTime % 60).toFixed() : '0'}` : '--:--'}
+             </span>
 
+            <input type='range' min={0} max={props.duration} className="seek-slider" 
+            value={props.currentTime || 0} onChange={(e) => setNewCurrent(e.target.value)}
+             onMouseUp={() => store.dispatch(actionFullPlay())} onMouseDown={() => store.dispatch(actionFullPause())}
             />
-            <span className="total-duration">{msToTime(props.duration) !== 'NaN'? msToTime(props.duration) : '00:00'}</span>
+
+            <span className="total-duration">{props.track?.id3?.time || (msToTime(props.duration) !== 'NaN:NaN'? msToTime(props.duration) : '00:00')}</span>
             
         </div>
 
@@ -56,10 +62,7 @@ return(
                 if (store.getState()?.player?.track) store.dispatch(actionFullSetVolume(volume)) }}
 
              />
-             
-            
-            <FontAwesomeIcon icon={faVolumeUp} />
-            
+            <FontAwesomeIcon icon={faVolumeUp} />  
         </div>
 
         <div className="buttons">
@@ -68,7 +71,7 @@ return(
             >
                 <FontAwesomeIcon icon={faRandom} className='fa-2x'/>
             </div>
-            <div className="random-track" 
+            <div className="prev-track" 
             // onClick={prevTrack()}
             >
                 <FontAwesomeIcon icon={faStepBackward} className='fa-2x'/>
@@ -78,10 +81,8 @@ return(
               onClick={() => {
                 if(store.getState()?.player?.isPlaying === true) {
                     store.dispatch(actionFullPause());
-                    //setPlay(true)
                  } else{
                     store.dispatch(actionFullPlay());
-                    //setPlay(false)
                  } 
                 }}
             >
@@ -103,12 +104,8 @@ return(
     </div>
 </div>)
 }
-function mapStateToProps (state) {
-    return {
-        track: state.player?.track,
-        duration: state.player?.duration,
-        
-    }
-  }
-  //export const СNowPlayingPlayer = connect(mapStateToProps)(NowPlayingPlayer)
-  export const СNowPlayingPlayer = connect(state => ({track: state.player?.track || [], duration: state.player?.duration || [], isPlaying: state.player?.isPlaying || false}) )(NowPlayingPlayer);
+
+  export const СNowPlayingPlayer = connect(state => ({track: state.player?.track || [], 
+    duration: state.player?.duration || '00:00',
+     isPlaying: state.player?.isPlaying || false,
+    currentTime: state.player?.currentTime || '00:00' }) )(NowPlayingPlayer);

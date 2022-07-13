@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {Provider, connect}   from 'react-redux';
+import {connect}   from 'react-redux';
 import { actionUsersPlaylists } from '../store/promiseReducer';
 import { actionFullSetPlaylist } from '../store/playerReducer';
 import { store } from '../store/store';
 import image from '../images/card.png';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import {CreatePlaylist} from './createPlaylist'
 import { Header } from './header';
 
@@ -30,13 +30,13 @@ import { Header } from './header';
 //       })
 // }
 
-const Playlist = ({playlist: {id, user_id, name, photo, description} = {}}) => 
+const Playlist = ({playlist = {}}) => 
   <div className="col-sm-3">
-    <Link className="card" to= {`/playlist/${id}`} onClick={() => store.dispatch(actionFullSetPlaylist({id, user_id, name, photo, description}) )}>
-      <img src={photo || image} className="card-img-top" alt="..."/>
+    <Link className="card" to= {`/playlist/${playlist.id}`} onClick={() => store.dispatch(actionFullSetPlaylist({playlist}) )}>
+      <img src={playlist.photo || image} className="card-img-top" alt="..."/>
       <div className="card-body">
-        <h5 className="card-title"> {name}</h5>
-        <p className="card-text">{description? description :  '.' }</p>
+        <h5 className="card-title"> {playlist.name}</h5>
+        <p className="card-text">{playlist.description? playlist.description :  '.' }</p>
         <button className="btn btn-primary" >Go somewhere</button>
       </div>
     </Link>
@@ -44,10 +44,26 @@ const Playlist = ({playlist: {id, user_id, name, photo, description} = {}}) =>
   
 
 
-export const UsersPlaylistsAll = ({playlists= []}) => 
+export const UsersPlaylistsAll = ({playlists= []}) => {
+  const [modalShow, setModalShow] = React.useState(false);
+  return (
+<>
+
   <div className='RootCategories row'>
+    <div className="col-sm-3 border border-white d-flex align-items-center justify-content-center" onClick={() => setModalShow(true)}>
+      <h3>Create new Playlist</h3>
+    </div>
+
+      <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
+        
+  
     {playlists.map((playlist, i) => <Playlist key={i} playlist={playlist}/>)}
   </div> 
+</>)
+}
 
 const СUsersPlaylists = connect(state => ({playlists: state.promise.usersPlaylists?.payload?.playlists|| []}), )(UsersPlaylistsAll);
                                               
@@ -77,7 +93,7 @@ function MyVerticallyCenteredModal(props) {
 
 
 export const UserPage = () => {
-let id = store.getState().auth.user.id;
+let id = store.getState().auth?.user?.id;
   const getAnswer = async () => {
     await store.dispatch(actionUsersPlaylists(id));	
   };
@@ -86,27 +102,17 @@ let id = store.getState().auth.user.id;
     getAnswer();
   }, []);
 
-const [modalShow, setModalShow] = React.useState(false);
-
     return(<>
     <Header/>
     <div className='d-flex container align-items-center justify-content-center'>
-        <div className='col'>
-            <img className='col-sm-3' alt='...' src={image}/>
+        <div className=''>
+            <img className='m-4' alt='...' src={image} width='150px'/>
         </div>
-        <div className='col'>
-            <h3>{store.getState().auth.user.name}</h3>
+        <div className=''>
+            <h3>{store.getState().auth?.user?.name}</h3>
             <a href='/change'>Edit Profile</a>
         </div>
     </div>
-    <Button variant="primary" onClick={() => setModalShow(true)}>
-        Create new Playlist
-    </Button>
-
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
 
     <h3>My playlists:</h3>
     <СUsersPlaylists/>

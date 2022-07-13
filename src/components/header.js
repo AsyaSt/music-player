@@ -1,11 +1,10 @@
-import image from '../images/card.png';
 import logo from '../images/musicico.png';
-import logoutimg from '../images/logout.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faArrowRightFromBracket} from '@fortawesome/free-solid-svg-icons';
 import {connect}   from 'react-redux';
 import { actionAuthLogout } from '../store/authReducer';
-
 import React from 'react';
-const REACT_VERSION = React.version;
+
 
 
 
@@ -37,7 +36,7 @@ export const Header = ({children}) =>
 </header>
 
 const ImgLogout = () => {
-    return <img alt='///' className='logoimg' src={logoutimg}/>
+    return <FontAwesomeIcon icon={faArrowRightFromBracket} className='fa-2x'/>  
 }
 
 const CLogout = connect(state => ({children: <ImgLogout/>}), 

@@ -1,5 +1,5 @@
 //import { store } from '../store/store';
-import { audio } from '../components/playlistById';
+import { audio } from '../components/Tracks';
 
 export const playerReducer = function(state = {}, {type, duration, track, playlist, playlistIndex, currentTime, volume}) {
     if (!state) {
@@ -55,14 +55,16 @@ export const actionFullPlay = () =>
     dispatch => {  
         audio.play();
         dispatch(actionPlay());
-        dispatch(actionFullGetDuration(audio.duration))
+        dispatch(actionFullGetDuration(audio.duration));
+        actionFullSetCurrentTime(audio.currentTime);
     }
-
 
 
 const actionPause = () => ({type:'PAUSE'})
 export const actionFullPause = () =>
     dispatch => {
+        dispatch(actionFullGetDuration(audio.duration));
+
         audio.pause();
         dispatch(actionPause());
     }
@@ -77,7 +79,6 @@ export const actionFullSetVolume = (volume) =>
 const actionSetTrack = (track) => ({type:'SET_TRACK', track})
 export const actionFullSetTrack = (track) =>
     dispatch => {
-        //audio.src = `http://player-api/storage/tracks/${track.file}`;
         dispatch(actionSetTrack(track));
         dispatch(actionFullPlay());
     }
