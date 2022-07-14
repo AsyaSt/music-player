@@ -10,34 +10,15 @@ import Modal from 'react-bootstrap/Modal';
 import {CreatePlaylist} from './createPlaylist'
 import { Header } from './header';
 
-// function sendForm (url, data) {
-//     fetch(`http://player-api/api/${url}`, {
-//         method: 'POST',
-//         body: data,
-//         headers: {
-          
-//           ...(localStorage.authToken ? {"Authorization": "Bearer " + localStorage.authToken} : {})
-          
-//           },
-//       }).then(res => res.json())
-//       .then(data => {
-//           if(data.token) {
-//             console.log(data)
-//             return data
-//           } else {
-//             //console.log(data.login[0]); 
-//           }
-//       })
-// }
+
 
 const Playlist = ({playlist = {}}) => 
-  <div className="col-sm-3">
+  <div className="col-sm-3 p-1">
     <Link className="card" to= {`/playlist/${playlist.id}`} onClick={() => store.dispatch(actionFullSetPlaylist({playlist}) )}>
-      <img src={playlist.photo || image} className="card-img-top" alt="..."/>
+      <img src={playlist.photo || image} className="card-img-top" alt="..."  height={'150px'}/>
       <div className="card-body">
         <h5 className="card-title"> {playlist.name}</h5>
         <p className="card-text">{playlist.description? playlist.description :  '.' }</p>
-        <button className="btn btn-primary" >Go somewhere</button>
       </div>
     </Link>
   </div>
@@ -103,14 +84,14 @@ let id = store.getState().auth?.user?.id;
   }, []);
 
     return(<>
-    <Header/>
+    
     <div className='d-flex container align-items-center justify-content-center'>
         <div className=''>
-            <img className='m-4' alt='...' src={image} width='150px'/>
+            <img className='m-4' alt='...' src={store.getState().auth?.user?.avatar || image} width='150px'/>
         </div>
         <div className=''>
             <h3>{store.getState().auth?.user?.name}</h3>
-            <a href='/change'>Edit Profile</a>
+            <Link to={'/editprofile'} >Edit Profile</Link>
         </div>
     </div>
 

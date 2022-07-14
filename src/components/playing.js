@@ -23,7 +23,7 @@ export let NowPlayingPlayer = (props) => {
     const [volume, setVolume] = useState(20);
     const [newCurrent, setNewCurrent] = useState(0)
 
-    audio.ontimeupdate = () =>  store.dispatch(actionFullSetCurrentTime(audio.currentTime));
+    // audio.ontimeupdate = () =>  store.dispatch(actionFullSetCurrentTime(audio.currentTime));
     useEffect(() => {
         if (props.currentTime) audio.currentTime = newCurrent
     }, [newCurrent])

@@ -7,7 +7,7 @@ import {history} from '../App';
 
 
 
-async function SendForm (url, data) {
+export async function SendForm (url, data) {
 
 
   let error = await fetch(`http://player-api/api/${url}`, {

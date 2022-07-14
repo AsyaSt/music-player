@@ -5,7 +5,7 @@ import { store } from '../store/store';
 import { connect } from 'react-redux';
 
 
-async function sendForm (url, data) {
+export async function sendForm (url, data) {
     let error = await fetch(`http://player-api/api/${url}`, {
         method: 'POST',
         body: data

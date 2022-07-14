@@ -55,7 +55,8 @@ export const actionFullPlay = () =>
     dispatch => {  
         audio.play();
         dispatch(actionPlay());
-        dispatch(actionFullGetDuration(audio.duration));
+        audio.onloadedmetadata = (() => dispatch(actionFullGetDuration(audio.duration)));
+        audio.ontimeupdate = () =>  dispatch(actionFullSetCurrentTime(audio.currentTime));
         actionFullSetCurrentTime(audio.currentTime);
     }
 
@@ -63,8 +64,6 @@ export const actionFullPlay = () =>
 const actionPause = () => ({type:'PAUSE'})
 export const actionFullPause = () =>
     dispatch => {
-        dispatch(actionFullGetDuration(audio.duration));
-
         audio.pause();
         dispatch(actionPause());
     }
