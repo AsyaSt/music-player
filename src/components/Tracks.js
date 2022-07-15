@@ -1,17 +1,21 @@
 import {connect}   from 'react-redux';
-import {actionFullSetTrack, actionFullPlay} from '../store/playerReducer';
+import {actionFullSetTrack, actionFullPlay, actionFullSetPlaylist} from '../store/playerReducer';
+import { actionNowPlaylist} from '../store/promiseReducer';
 import { store } from '../store/store';
 
 let i = 1;
 export let audio = new Audio();
 
-const Track = ({track: {name, file, id3, id} = {} }, key) => 
+const Track = ({track: {name, file, id3, id , pivot, number} = {}, playlist={}, plstnow={} },  key) => 
 <tr>
     <th scope="row">{i++}</th>
     <td>          
         <div onClick={async () => {
-            audio.src = `http://player-api/storage/tracks/${file}`;   
-            store.dispatch(actionFullSetTrack({name, file, id3, id}));
+            store.dispatch(actionFullSetTrack({name, file, id3, id, pivot, number}));
+            store.dispatch(actionNowPlaylist(store.getState().player?.track?.pivot?.playlist_id));
+            //store.dispatch(actionFullSetPlaylist(playlist));
+            //store.dispatch(actionFullSetPlaylist(plstnow?.payload?.tracks));
+            //store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
             store.dispatch(actionFullPlay());
         }}>
             {name}
@@ -39,4 +43,6 @@ const TracksAll = ({tracks=[]}) =>
     </tbody>
 </table>
 
-export const СAllTracks = connect(state => ({tracks: state.promise.plstById?.payload?.tracks || []}), )(TracksAll);
+export const СAllTracks = connect(state => ({playlist: state.promise.plstById?.payload || {},
+                                 tracks: state.promise?.plstById?.payload?.tracks || [],
+                                 plstnow: state.promise?.plstnow || {}} ), )(TracksAll);

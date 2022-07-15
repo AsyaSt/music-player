@@ -23,7 +23,6 @@ export let NowPlayingPlayer = (props) => {
     const [volume, setVolume] = useState(20);
     const [newCurrent, setNewCurrent] = useState(0)
 
-    // audio.ontimeupdate = () =>  store.dispatch(actionFullSetCurrentTime(audio.currentTime));
     useEffect(() => {
         if (props.currentTime) audio.currentTime = newCurrent
     }, [newCurrent])
@@ -73,7 +72,7 @@ return(
             </div>
             <div className="prev-track" 
             // onClick={prevTrack()}
-            >
+            > 
                 <FontAwesomeIcon icon={faStepBackward} className='fa-2x'/>
                 
             </div>

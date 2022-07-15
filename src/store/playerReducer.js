@@ -1,4 +1,4 @@
-//import { store } from '../store/store';
+import { store } from '../store/store';
 import { audio } from '../components/Tracks';
 
 export const playerReducer = function(state = {}, {type, duration, track, playlist, playlistIndex, currentTime, volume}) {
@@ -59,7 +59,7 @@ export const actionFullPlay = () =>
         audio.ontimeupdate = () =>  dispatch(actionFullSetCurrentTime(audio.currentTime));
         actionFullSetCurrentTime(audio.currentTime);
     }
-
+ 
 
 const actionPause = () => ({type:'PAUSE'})
 export const actionFullPause = () =>
@@ -78,8 +78,10 @@ export const actionFullSetVolume = (volume) =>
 const actionSetTrack = (track) => ({type:'SET_TRACK', track})
 export const actionFullSetTrack = (track) =>
     dispatch => {
+        audio.src = `http://player-api/storage/tracks/${track?.file}`;
         dispatch(actionSetTrack(track));
         dispatch(actionFullPlay());
+        //dispatch(actionFullSetPlaylist(store.getState().promise?.plstnow?.payload?.tracks))
     }
 
 const actionGetDuration = (duration) => ({type:'GET_DURATION', duration})
@@ -92,6 +94,9 @@ const actionSetCurrentTime = (currentTime) => ({type:'SET_CURRENT_TIME', current
 export const actionFullSetCurrentTime = (currentTime) =>
     dispatch => {
         dispatch(actionSetCurrentTime(currentTime));
+        audio.onended = function() {
+            dispatch(actionNextTrack());
+        };
     }
 
 
@@ -99,4 +104,27 @@ const actionSetPlaylist = (playlist) => ({type:'SET_PLAYLIST', playlist})
 export const actionFullSetPlaylist = (playlist) =>
     dispatch => {
         dispatch(actionSetPlaylist(playlist));
+    }
+
+export const actionNextTrack = (track) =>
+    async (dispatch, getState) => {
+        const playlist = getState().player?.playlist
+        if (playlist) {
+            const count = playlist.tracks.indexOf(track)
+            if (getState().player.loopType === 1) {
+                console.log('repeat')
+                dispatch(actionFullSetTrack(1))
+                setTimeout(() => { dispatch(actionFullSetTrack(playlist.tracks[count])); dispatch(actionFullPlay()) }, 100)
+            }
+            else if (getState().player.loopType === 2 && playlist.tracks.indexOf(getState().player.track) === playlist.tracks.length - 1) {
+                dispatch(actionFullSetTrack(1))
+                setTimeout(() => { dispatch(actionFullSetTrack(playlist.tracks[0])); dispatch(actionFullPlay()) }, 100)
+            }
+            else {
+                if (count + 1 < playlist.tracks.length) {
+                    dispatch(actionFullSetTrack(playlist.tracks[count + 1]))
+                    dispatch(actionFullPlay())
+                }
+            }
+        }
     }

@@ -48,9 +48,11 @@ export const actionPromise   = (name, promise) =>
             
         })
   
-    
 
-    const gql = getGQL(backendURL);
+ 
+
+
+export const gql = getGQL(backendURL);
 
 export const actionAllPlaylists = () =>
     actionPromise('allPlaylists', gql('/playlists'))
@@ -62,6 +64,9 @@ export const actionUsersPlaylists = (id) =>
 
 export const actionPlaylistById = (_id) => 
   actionPromise('plstById', gql('/playlists/'+_id))
+
+  export const actionNowPlaylist = (_id) => 
+  actionPromise('plstnow', gql('/playlists/'+_id))
 
 
  export const actionFullLogin = async function(login, password) {

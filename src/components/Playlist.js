@@ -10,7 +10,7 @@ import { actionFullSetPlaylist } from '../store/playerReducer';
 const Playlist = ({playlist: {id, user_id, name, photo, description, tracks} = {}}) =>
 <div className="col-sm-3">
   <Link className="card" to= {`/playlist/${id}`} onClick={() => store.dispatch(actionFullSetPlaylist({id, user_id, name, photo, description, tracks}) )}>
-    <img src={photo} className="card-img-top" alt="..."/>
+    <img src={photo} className="card-img-top" alt="..." height={'150px'}/>
     <div className="card-body">
       <h5 className="card-title"> {name}</h5>
       {/* <p className="card-text">{description? description :  '.' }</p> */}
