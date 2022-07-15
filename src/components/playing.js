@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, {useState, useEffect} from 'react';
 import {faVolumeDown, faVolumeUp, faRandom, faStepBackward, faStopCircle, faStepForward, faPlayCircle, faRepeat} from '@fortawesome/free-solid-svg-icons'
 import { store } from '../store/store';
-import {actionFullGetDuration, actionFullSetTrack, actionFullPlay, actionFullPause, actionFullSetVolume, actionFullSetCurrentTime } from '../store/playerReducer';
+import {actionFullGetDuration, actionFullSetTrack, actionFullPlay, actionFullPause, actionFullSetVolume, actionPrevTrack, actionNextTrack} from '../store/playerReducer';
 import {Provider, connect}   from 'react-redux';
 import { audio } from './Tracks';
 
@@ -71,7 +71,7 @@ return(
                 <FontAwesomeIcon icon={faRandom} className='fa-2x'/>
             </div>
             <div className="prev-track" 
-            // onClick={prevTrack()}
+                onClick={ () => store.dispatch(actionPrevTrack(props.track))}
             > 
                 <FontAwesomeIcon icon={faStepBackward} className='fa-2x'/>
                 
@@ -88,7 +88,12 @@ return(
                 <FontAwesomeIcon icon={(!props.isPlaying) ? faPlayCircle : faStopCircle} className='fa-5x' />
             </div>
             <div className="next-track"
-            //  onClick={nextTrack()}
+              onClick={() => {
+                console.log(props.track);
+                store.dispatch(actionNextTrack(props.track));
+
+                }
+              }
              >
                 <FontAwesomeIcon icon={faStepForward} className='fa-2x'/>
             </div>

@@ -1,7 +1,7 @@
 import { store } from '../store/store';
 import { audio } from '../components/Tracks';
 
-export const playerReducer = function(state = {}, {type, duration, track, playlist, playlistIndex, currentTime, volume}) {
+export const playerReducer = function(state = {}, {type, duration, track, playlist, playlistIndex, currentTime, volume, trackCount}) {
     if (!state) {
         return {};
     }
@@ -45,6 +45,11 @@ export const playerReducer = function(state = {}, {type, duration, track, playli
             playlist,
             playlistIndex
         }
+    } if (type === 'SET_TRACK_COUNT'){
+        return {
+            ...state,
+            trackCount
+        }
     }
     return state;
 }
@@ -83,6 +88,14 @@ export const actionFullSetTrack = (track) =>
         dispatch(actionFullPlay());
         //dispatch(actionFullSetPlaylist(store.getState().promise?.plstnow?.payload?.tracks))
     }
+const actionSetTrackCount = (trackCount) => ({type:'SET_TRACK_COUNT', trackCount})
+export const actionFullSetTrackCount = (trackCount) =>
+    dispatch => {
+        console.log(trackCount);
+        dispatch(actionSetTrackCount(trackCount));
+        //dispatch(actionFullPlay());
+        //dispatch(actionFullSetPlaylist(store.getState().promise?.plstnow?.payload?.tracks))
+    }
 
 const actionGetDuration = (duration) => ({type:'GET_DURATION', duration})
 export const actionFullGetDuration = (duration) =>
@@ -106,25 +119,41 @@ export const actionFullSetPlaylist = (playlist) =>
         dispatch(actionSetPlaylist(playlist));
     }
 
+
+
 export const actionNextTrack = (track) =>
+    async (dispatch, getState) => {
+        const playlist = store.getState().player?.playlist
+        if (playlist) {
+            console.log(playlist)
+            const count = playlist.indexOf(track)
+            if (getState().player?.loopType === 1) {
+                console.log('repeat')
+                //dispatch(actionFullSetTrack(1))
+                //setTimeout(() => { dispatch(actionFullSetTrack(playlist.tracks[count])); dispatch(actionFullPlay()) }, 100)
+            }
+            // else if (getState().player.loopType === 2 && playlist.tracks.indexOf(getState().player.track) === playlist.tracks.length - 1) {
+            //     dispatch(actionFullSetTrack(1))
+            //     setTimeout(() => { dispatch(actionFullSetTrack(playlist.tracks[0])); dispatch(actionFullPlay()) }, 100)
+            // }
+            else {
+                console.log('tap tap tap')
+                if (count + 1 < playlist.length) {
+                    dispatch(actionFullSetTrack(playlist[count + 1]))
+                    dispatch(actionFullPlay())
+                }
+            }
+        }
+    }
+
+    export const actionPrevTrack = (track) =>
     async (dispatch, getState) => {
         const playlist = getState().player?.playlist
         if (playlist) {
-            const count = playlist.tracks.indexOf(track)
-            if (getState().player.loopType === 1) {
-                console.log('repeat')
-                dispatch(actionFullSetTrack(1))
-                setTimeout(() => { dispatch(actionFullSetTrack(playlist.tracks[count])); dispatch(actionFullPlay()) }, 100)
-            }
-            else if (getState().player.loopType === 2 && playlist.tracks.indexOf(getState().player.track) === playlist.tracks.length - 1) {
-                dispatch(actionFullSetTrack(1))
-                setTimeout(() => { dispatch(actionFullSetTrack(playlist.tracks[0])); dispatch(actionFullPlay()) }, 100)
-            }
-            else {
-                if (count + 1 < playlist.tracks.length) {
-                    dispatch(actionFullSetTrack(playlist.tracks[count + 1]))
-                    dispatch(actionFullPlay())
-                }
+            const count = playlist.indexOf(track)
+            if (count > 0) {
+                dispatch(actionFullSetTrack(playlist[count - 1]))
+                dispatch(actionFullPlay())
             }
         }
     }

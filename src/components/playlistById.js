@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faTrashCan} from '@fortawesome/free-solid-svg-icons'
-import { actionFullSetPlaylist, actionFullSetTrack} from '../store/playerReducer';
+import { actionFullSetPlaylist, actionFullSetTrack, actionFullSetTrackCount} from '../store/playerReducer';
 import {connect}   from 'react-redux';
 // import {actionFullSetTrack, actionFullPlay} from '../store/playerReducer';
 import {СAllTracks } from './Tracks'
@@ -87,6 +87,8 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
                     onClick={async() => {
                         store.dispatch(actionFullSetPlaylist(playlist.tracks));
                         store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
+                        store.dispatch(actionFullSetTrackCount(0));
+                        //store.dispatch(actionFullSetTrack(0));
                     }}
                     
                     >Play</button></div>
