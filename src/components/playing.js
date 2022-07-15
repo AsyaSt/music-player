@@ -5,6 +5,7 @@ import { store } from '../store/store';
 import {actionFullGetDuration, actionFullSetTrack, actionFullPlay, actionFullPause, actionFullSetVolume, actionPrevTrack, actionNextTrack} from '../store/playerReducer';
 import {Provider, connect}   from 'react-redux';
 import { audio } from './Tracks';
+import img_album from '../images/default_album.gif'
 
 function msToTime(duration) {
     let hours,minutes,seconds;
@@ -25,14 +26,16 @@ export let NowPlayingPlayer = (props) => {
 
     useEffect(() => {
         if (props.currentTime) audio.currentTime = newCurrent
-    }, [newCurrent])
+    }, [newCurrent]);
+    
+    let album_photo = (props.track?.album?.photo) ? `http://player-api/storage/albums/${props.track?.album?.photo}` : img_album 
 
 return(
 <div className="player">
     <div className="wrapper">
         <div className="details">
             <div className="now-playing"></div>
-            <div className="track-art"></div>
+            <div className="track-art" style={{backgroundImage:`url(${album_photo})`}} ></div>
             <div className="track-name">{props.track?.name|| 'Track Name'  }</div>
             <div className="now-playing">{props.track?.id3?.artist || 'Artist'  }</div>
         </div>

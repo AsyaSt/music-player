@@ -38,11 +38,11 @@ const Content = ({children}) =>
   <>
   {store.getState().auth?.token && <Header/>}
     <section className='d-flex justify-content-around'>
-      <div className='col'>
+      <div className={store.getState().auth?.token ? 'col-7' : 'col-12'}>
         {children}
       </div>
-      <div className='col'>
-        {store.getState().auth?.token && <СNowPlayingPlayer/>}
-      </div>
+      {/* <div className='col-5'> */}
+        {store.getState().auth?.token && <СNowPlayingPlayer className='col-5'/>}
+      {/* </div> */}
     </section>
   </>

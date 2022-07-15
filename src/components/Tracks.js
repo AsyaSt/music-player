@@ -12,12 +12,8 @@ const Track = ({track = {}, trackone={}, playlist={}, plstnow={}},  key) =>
     <td>          
         <div onClick={async () => {
             store.dispatch(actionFullSetPlaylist(playlist.tracks));
-            //console.log(playlist.tracks.indexOf(track))
             store.dispatch(actionFullSetTrack(playlist.tracks[playlist.tracks.indexOf(track)]));
             store.dispatch(actionNowPlaylist(store.getState().player?.track?.pivot?.playlist_id));
-            //store.dispatch(actionFullSetPlaylist(playlist));
-            //store.dispatch(actionFullSetPlaylist(plstnow?.payload?.tracks));
-            //store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
             store.dispatch(actionFullPlay());
         }}>
             {track.name}
