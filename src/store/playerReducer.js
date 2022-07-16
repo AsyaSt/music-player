@@ -1,7 +1,7 @@
 import { store } from '../store/store';
 import { audio } from '../components/Tracks';
 
-export const playerReducer = function(state = {}, {type, duration, track, playlist, playlistIndex, currentTime, volume,  repeat=1}) {
+export const playerReducer = function(state = {}, {type, duration, track, playlist, playlistIndex, currentTime, volume,  repeat=1, random=1}) {
     if (!state) {
         return {};
     }
@@ -49,6 +49,11 @@ export const playerReducer = function(state = {}, {type, duration, track, playli
         return {
             ...state,
             repeat
+        }
+    } if (type === 'SET_RANDOM') {
+        return {
+            ...state,
+            random
         }
     }
     return state;
@@ -149,4 +154,27 @@ export const actionNextTrack = (track) =>
         }
     }
 
-export const actionSetRepeat = (repeat) => ({ type: 'SET_REPEAT', repeat})
+export const actionSetRepeat = (repeat) => ({ type: 'SET_REPEAT', repeat});
+export const actionSetRandom = (random) => ({ type: 'SET_RANDOM', random});
+
+
+export const actionPlayerRandom = () =>
+    async (dispatch, getState) => {
+        if (getState().player?.playlist) {
+            let newPlaylist = [...getState().player.playlist];
+            let currentIndex = newPlaylist.length
+            while (currentIndex !== 0) {
+                let randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [newPlaylist[currentIndex], newPlaylist[randomIndex]] = [newPlaylist[randomIndex], newPlaylist[currentIndex]];
+            }
+            const currentTrackIndex = newPlaylist.indexOf(getState().player?.track);
+            const currentTrack = newPlaylist.splice(currentTrackIndex, 1)
+            newPlaylist = [currentTrack[0], ...newPlaylist]
+            dispatch(actionSetPlaylist([
+                ...newPlaylist
+            ]))
+            
+        }
+        
+    }

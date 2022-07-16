@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, {useState, useEffect} from 'react';
 import {faVolumeDown, faVolumeUp, faRandom, faStepBackward, faStopCircle, faStepForward, faPlayCircle, faRepeat} from '@fortawesome/free-solid-svg-icons'
 import { store } from '../store/store';
-import {actionFullGetDuration, actionFullSetTrack, actionFullPlay, actionFullPause, actionFullSetVolume, actionPrevTrack, actionNextTrack, actionSetRepeat} from '../store/playerReducer';
+import {actionPlayerRandom, actionFullPlay, actionFullPause, actionFullSetVolume, actionPrevTrack, actionNextTrack, actionSetRepeat, actionSetRandom} from '../store/playerReducer';
 import {Provider, connect}   from 'react-redux';
 import { audio } from './Tracks';
 import img_album from '../images/default_album.gif'
@@ -69,9 +69,12 @@ return(
 
         <div className="buttons">
             <div className="random-track" 
-            // onClick={randomTrack()}
+             onClick={() => {
+                props.random === 1 ? store.dispatch(actionSetRandom(2)) : store.dispatch(actionSetRandom(1))
+                store.dispatch(actionPlayerRandom());
+             }}
             >
-                <FontAwesomeIcon icon={faRandom} className='fa-2x'/>
+                <FontAwesomeIcon icon={faRandom} className={props.random === 1 ? 'fa-2x' : 'fa-3x'}/>
             </div>
             <div className="prev-track" 
                 onClick={ () => store.dispatch(actionPrevTrack(props.track))}
@@ -114,4 +117,5 @@ return(
     duration: state.player?.duration || '00:00',
     isPlaying: state.player?.isPlaying || false,
     currentTime: state.player?.currentTime || '00:00',
-    repeat: state.player?.repeat || 1}) )(NowPlayingPlayer);
+    repeat: state.player?.repeat || 1,
+    random: state.player?.random || 1}) )(NowPlayingPlayer);

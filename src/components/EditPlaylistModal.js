@@ -1,6 +1,5 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {connect}   from 'react-redux';
 import React, {useState} from 'react';
 // import { sendForm } from './LoadTrackModal';
 import { sendForm } from './SendForm';
@@ -17,12 +16,12 @@ export function EditPlaylistModal  (props)  {
         const data = new FormData();
 
         data.append("name", name || props.playlist?.name);
-        data.append("description", description || props.playlist?.description);
+        data.append("description", description || props.playlist?.description || '');
         data.append("private", props.playlist?.private);
         image.name && data.append("photo",  image, image.name);
 
         sendForm('playlists/' + props.playlist?.id + '/edit', data);  
-    }
+    } 
 
     return(
     <Modal
@@ -32,9 +31,7 @@ export function EditPlaylistModal  (props)  {
         centered
     >
         <Modal.Header closeButton> 
-        <Modal.Title id="contained-modal-title-vcenter">
-        
-        </Modal.Title> 
+        <Modal.Title id="contained-modal-title-vcenter"></Modal.Title> 
         </Modal.Header>
         <Modal.Body >
         <form onSubmit={PostEditPlaylist} className="authorization center align-items-center justify-content-center  d-flex" id='loadTracksForm'>
@@ -52,7 +49,7 @@ export function EditPlaylistModal  (props)  {
                         <label  className="form-label">Name</label><br/>
                         <input type="text" id="username" className='input form-control mb-3' value={name} onChange={e => setName(e.target.value)}/>
                         <label  className="form-label">Description</label>
-                        <textarea type="password" id="password" className='form-control mb-3' value={description} onChange={e => setDescription(e.target.value)}/>
+                        <textarea type="password" id="password" className='form-control mb-3' value={description || ''} onChange={e => setDescription(e.target.value)}/>
                     </div>
                 </div>
             </div>

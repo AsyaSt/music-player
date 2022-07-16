@@ -36,7 +36,7 @@ export const Main = ({auth}) =>
 const Content = ({children}) => 
   <>
   {store.getState().auth?.token && <Header/>}
-    <section className='d-flex justify-content-around'>
+    <section className='d-flex justify-content-around py-4'>
       <div className={store.getState().auth?.token ? 'col-7' : 'col-12'}>
         {children}
       </div>

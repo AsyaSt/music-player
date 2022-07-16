@@ -11,15 +11,15 @@ import {faTrash,
     faPlus,
     faAlignCenter,
     faPlay, faHeart} from '@fortawesome/free-solid-svg-icons'
-import { actionFullSetPlaylist, actionFullSetTrack, actionFullSetTrackCount} from '../store/playerReducer';
+import { actionFullSetPlaylist, actionFullSetTrack} from '../store/playerReducer';
 import {connect}   from 'react-redux';
-// import {actionFullSetTrack, actionFullPlay} from '../store/playerReducer';
 import {СAllTracks } from './Tracks'
 import { LoadTrackModal } from './LoadTrackModal';
 import { EditPlaylistModal } from './EditPlaylistModal';
 import { Link } from 'react-router-dom';
 import { sendForm } from './SendForm';
 import { history } from '../App';
+import {ButtonGroup, Dropdown} from "react-bootstrap";
 
 
 let listToPlay;
@@ -110,14 +110,31 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
                             <div className='d-flex'>
                                 <div className='row g-2'>
                                     <div className="col">
-                                        <Button className='d-flex align-items-center' variant="outline-light" title='Play' onClick={async() => {
+                                        <Dropdown
+                                                  as={ButtonGroup}
+                                                  align={"end"}>
+                                            <Button className='d-flex align-items-center' variant="outline-light" title='Play' onClick={async() => {
+                                                store.dispatch(actionFullSetPlaylist(playlist.tracks));
+                                                store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
+                                            }}>
+                                                <FontAwesomeIcon className='me-2' icon={faPlay}/>
+                                                Play
+                                            </Button>
+
+                                            <Dropdown.Toggle split variant="outline-light" id="dropdown-split-basic"/>
+
+                                            <Dropdown.Menu variant="dark">
+                                                <Dropdown.Item href="#/action-1">Add to Queue</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        {/* <Button className='d-flex align-items-center' variant="outline-light" title='Play' onClick={async() => {
                                             store.dispatch(actionFullSetPlaylist(playlist.tracks));
                                             store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
                                             //store.dispatch(actionFullSetTrackCount(0));
                                         }}>
                                             <FontAwesomeIcon className='me-2' icon={faPlay}/>
                                             Play
-                                        </Button>
+                                        </Button> */}
                                     </div>
                                     <div className="col">
                                         <button type="button" className="btn btn-outline-danger">

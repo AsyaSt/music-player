@@ -2,77 +2,58 @@ import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {connect}   from 'react-redux';
 import { actionUsersPlaylists } from '../store/promiseReducer';
-import { actionFullSetPlaylist } from '../store/playerReducer';
 import { store } from '../store/store';
 import image from '../images/card.png';
-import Modal from 'react-bootstrap/Modal';
-// import Button from 'react-bootstrap/Button';
-import {CreatePlaylist} from './createPlaylist'
-
+import {CreatePlaylist} from './createPlaylist';
+import { history } from '../App';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+    faAlignCenter,
+    faCompactDisc,
+    faHeadphonesSimple, faPlay,
+    faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import Button from "react-bootstrap/Button";
 
 
 const Playlist = ({playlist = {}}) => 
-  <div className="col-sm-3 p-1">
-    <Link className="card" to= {`/playlist/${playlist.id}`} 
-    // onClick={() => store.dispatch(actionFullSetPlaylist({playlist}) )}
-    >
-      <img src={playlist.photo || image} className="card-img-top" alt="..."  height={'150px'}/>
-      <div className="card-body">
-        <h5 className="card-title"> {playlist.name}</h5>
-        <p className="card-text">{playlist.description? playlist.description :  '.' }</p>
+  <div className="">
+      <div className="me-4 mb-4 p-4 playlist-img-box rounded-5 position-relative"
+           style={{backgroundImage: `url(${playlist.photo || image})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center", width:250, height:250}}
+      >
+          <div className="playlist-grey-box"></div>
+          <Link className="d-flex border-0 link-light position-relative text-decoration-none h4 text-wrap"
+                to={`/playlist/${playlist.id}`}>
+              {playlist.name}
+          </Link>
+          <Button variant="outline-light" className='rounded-5 position-absolute playlist-play-box'  title='Play'>
+              <FontAwesomeIcon className='' icon={faPlay}/>
+          </Button>
       </div>
-    </Link>
   </div>
   
-
-
-export const UsersPlaylistsAll = ({playlists= []}) => {
-  const [modalShow, setModalShow] = React.useState(false);
-  return (
-<>
-
-  <div className='RootCategories row'>
-    <div className="col-sm-3 border border-white d-flex align-items-center justify-content-center" onClick={() => setModalShow(true)}>
-      <h3>Create new Playlist</h3>
-    </div>
-
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
-        
-  
-    {playlists.map((playlist, i) => <Playlist key={i} playlist={playlist}/>)}
-  </div> 
-</>)
-}
-
-const СUsersPlaylists = connect(state => ({playlists: state.promise.usersPlaylists?.payload?.playlists|| []}), )(UsersPlaylistsAll);
-                                              
-
-function MyVerticallyCenteredModal(props) {
+  export const UsersPlaylistsAll = ({playlists= []}) => {
+    const [modalShow, setModalShow] = React.useState(false);
     return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-         {/* <Modal.Header closeButton> */}
-          {/* <Modal.Title id="contained-modal-title-vcenter">
-            Create new Playlist
-          </Modal.Title> */}
-        {/*</Modal.Header> */}
-        <Modal.Body >
-          <CreatePlaylist props={props}/>
-        </Modal.Body>
-        {/* <Modal.Footer> 
-          <Button variant="outline-danger" onClick={props.onHide}>Create</Button> 
-         </Modal.Footer> */}
-      </Modal>
-    );
+  <>
+      <div className="d-flex justify-content-between align-items-center py-3">
+          <h3 className="text-uppercase"> <FontAwesomeIcon icon={faHeadphonesSimple} className="me-2"/>My playlists</h3>
+          <Button  variant="outline-success" title='Delete playlist' onClick={() => setModalShow(true)}>
+              <FontAwesomeIcon icon={faPlus} />
+          </Button>
+          <CreatePlaylist
+              show={modalShow}
+              onHide={() => setModalShow(false)}
+          />
+      </div>
+    <div className='RootCategories d-flex justify-content-start flex-wrap'>
+      {playlists.map((playlist, i) => <Playlist key={i} playlist={playlist}/>)}
+    </div> 
+  </>)
   }
 
+const СUsersPlaylists = connect(state => ({playlists: state.promise.usersPlaylists?.payload?.playlists|| []}))(UsersPlaylistsAll);
+                                              
 
 export const UserPage = () => {
 let id = store.getState().auth?.user?.id;
@@ -86,17 +67,25 @@ let id = store.getState().auth?.user?.id;
 
     return(<>
     
-    <div className='d-flex container align-items-center justify-content-center'>
-        <div className=''>
-            <img className='m-4' alt='...' src={store.getState().auth?.user?.avatar || image} width='150px'/>
-        </div>
-        <div className=''>
-            <h3>{store.getState().auth?.user?.name}</h3>
-            <Link to={'/editprofile'} >Edit Profile</Link>
-        </div>
-    </div>
+    <div className='d-flex  w-100'>
+            <div className='me-4 playlist-img-box rounded-5' style={{backgroundImage: `url(${store.getState().auth?.user?.avatar || image})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
+            </div>
+            <div className='w-100'>
+                <div className="d-flex flex-column justify-content-between h-100">
+                    <div className="w-100 row">
+                            <p className='h4 m-0'>{store.getState().auth?.user?.name}</p>
 
-    <h3>My playlists:</h3>
+                            <Link to={'/editprofile'} className="mb-3" >Edit Profile</Link>
+
+                            <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faHeadphonesSimple} /> 100 Tracks</p>
+                            <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faCompactDisc} /> 8 PLaylists</p>
+                            <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faAlignCenter} />
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid amet animi aspernatur facere iste nisi omnis optio, vel vitae? Accusantium assumenda autem cumque ducimus eum ipsa, maiores pariatur repudiandae?
+                            </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     <СUsersPlaylists/>
 
     </>)

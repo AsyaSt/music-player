@@ -3,7 +3,7 @@
 
 
 export function sendForm (url, data) {
-    fetch(`http://player-api/api/${url}`, {
+    return fetch(`http://player-api/api/${url}`, {
         method: 'POST',
         body: data,
         headers: {
@@ -17,7 +17,8 @@ export function sendForm (url, data) {
             console.log(data)
             return data
           } else {
-            //console.log(data.login[0]); 
+            console.log(data);
+            return data 
           }
       })
 } 

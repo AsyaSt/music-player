@@ -41,9 +41,7 @@ export function EditProfile  (props)  {
     const postForm = async (event)  =>{
         event.preventDefault();
         const data = new FormData();
-
         login && login!==props.user?.login && data.append("login", login);
-        console.log(login, props.user?.login)
         name && name!==props.user?.name && data.append("name", name);
         avatar.name && data.append("avatar",  avatar, avatar.name);
         
@@ -128,4 +126,5 @@ export function EditProfile  (props)  {
     </>)
 }
 export const CEditProfile = connect(state => ({ user: state.auth?.user }))(EditProfile);
+
   

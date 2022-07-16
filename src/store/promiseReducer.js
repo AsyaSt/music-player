@@ -75,15 +75,3 @@ export const actionPlaylistById = (_id) =>
 
     store.dispatch(actionAuthLogin(token));
 };
-
-
-// export const actionCreateOrder = () => async (dispatch) => {
-//     let orderGoods = [];
-//     Object.entries(store.getState().cart).map(([_id,{count}])=>orderGoods.push({"count":count,"good":{_id:_id}}))
-//     actionPromise('createOrder',gql(`mutation newOrder($order:OrderInput) {
-//             OrderUpsert(order:$order) {
-//               _id total
-//             }
-//           }`,{order:{orderGoods}}));
-//          await store.dispatch(actionCartClean());
-//     }
