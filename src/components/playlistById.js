@@ -46,8 +46,8 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
     <div className='d-flex justify-content-around w-100'>
         <div className='w-100 pt-4'>
             <div className='d-flex mb-3 w-100'>
-                <div className='me-4'>
-                    <img className='rounded-5' src={playlist.photo} width ='250px' alt='...'/>
+            <div className='me-4 playlist-img-box rounded-5' style={{backgroundImage: `url(${playlist.photo})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
+                    {/*<img className='rounded-5 playlist-img' src={playlist.photo} width ='250px' alt='...'/>*/}
                 </div>
                 <div className='w-100'>
                     <div className="d-flex flex-column justify-content-between h-100">
