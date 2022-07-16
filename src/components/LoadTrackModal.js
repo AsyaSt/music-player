@@ -3,27 +3,10 @@ import Modal from 'react-bootstrap/Modal';
 import {connect}   from 'react-redux';
 import React, {useState, useEffect} from 'react';
 import { store } from '../store/store';
+import { sendForm } from './SendForm';
+import { actionPlaylistById} from '../store/promiseReducer';
+import { actionFullSetPlaylist, actionFullSetTrack, actionFullSetTrackCount} from '../store/playerReducer';
 
-
-export function sendForm (url, data) {
-    fetch(`http://player-api/api/${url}`, {
-        method: 'POST',
-        body: data,
-        headers: {
-          
-          ...(localStorage.authToken ? {"Authorization": "Bearer " + localStorage.authToken} : {})
-          
-          },
-      }).then(res => res.json())
-      .then(data => {
-          if(data.token) {
-            console.log(data)
-            return data
-          } else {
-            //console.log(data.login[0]); 
-          }
-      })
-} 
 
 export function LoadTrackModal  (props)  {
     const [tracks, setTrack] = useState(null);
@@ -62,7 +45,15 @@ return(
     </form>
     </Modal.Body>
     <Modal.Footer> 
-      <Button variant="outline-danger" type='submit' form='loadTracksForm' onClick={props.onHide}>Save</Button> 
+      <Button variant="outline-danger" type='submit' form='loadTracksForm' onClick={() => {
+      props.onHide();
+      setTimeout(() => {
+        store.dispatch(actionPlaylistById(props.id));
+        setTimeout(() => store.dispatch(actionFullSetPlaylist(store.getState().promise.plstById?.payload?.tracks)), 1000);
+        }
+        , 1000);
+      }
+      }>Save</Button> 
      </Modal.Footer>
   </Modal>)
 }

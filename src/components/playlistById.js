@@ -4,7 +4,13 @@ import { actionPlaylistById} from '../store/promiseReducer';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {faTrash,
+    faPen,
+    faUserAstronaut,
+    faCompactDisc,
+    faPlus,
+    faAlignCenter,
+    faPlay, faHeart} from '@fortawesome/free-solid-svg-icons'
 import { actionFullSetPlaylist, actionFullSetTrack, actionFullSetTrackCount} from '../store/playerReducer';
 import {connect}   from 'react-redux';
 // import {actionFullSetTrack, actionFullPlay} from '../store/playerReducer';
@@ -12,9 +18,9 @@ import {СAllTracks } from './Tracks'
 import { LoadTrackModal } from './LoadTrackModal';
 import { EditPlaylistModal } from './EditPlaylistModal';
 import { Link } from 'react-router-dom';
-import { sendForm } from './LoadTrackModal';
+import { sendForm } from './SendForm';
 import { history } from '../App';
-import {audio}  from './Tracks'
+
 
 let listToPlay;
 export const PlaylistById = ({playlist = {}, tracks={}}) => {
@@ -37,89 +43,107 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
   
   return(
     <>
-    <div className='d-flex justify-content-around'>
-        <div className='pt-4'>
-            {/* <h1 >Playlist</h1> */}
-            <div className='d-flex justify-content-center'>
+    <div className='d-flex justify-content-around w-100'>
+        <div className='w-100 pt-4'>
+            <div className='d-flex mb-3 w-100'>
                 <div className='me-4'>
-                    <img src={playlist.photo} width ='250px' alt='...'/>
+                    <img className='rounded-5' src={playlist.photo} width ='250px' alt='...'/>
                 </div>
-                <div>
-                    <p className='h4'>Playlist name: {playlist.name}</p>
+                <div className='w-100'>
+                    <div className="d-flex flex-column justify-content-between h-100">
+                        <div className="w-100 row">
+                            <div className='d-flex justify-content-between align-items-center w-100'>
+                                <p className='h4 m-0'>{playlist.name}</p>
+                                {playlist.user_id === store.getState().auth.user.id?
+                                    <>
+                                    <div className="d-flex row g-2">
+                                        <div className="col">
+                                            <Button  variant="outline-success" title='Add tracks' onClick={() => setModalShow(true)}>
+                                                <FontAwesomeIcon icon={faPlus} />
+                                            </Button>
+                                            <LoadTrackModal id={id} show={modalShow} onHide={() => setModalShow(false)} />
+                                        </div>
+                                        <div className="col">
+                                            <Button  variant="outline-secondary" title='Edit playlist' onClick={() => setModalTrackShow(true)}>
+                                                <FontAwesomeIcon icon={faPen} />
+                                            </Button>
+                                            <EditPlaylistModal  tracks={tracks}  show={modalTrackShow} playlist={playlist}
+                                                                onHide={() => setModalTrackShow(false)}></EditPlaylistModal>
+                                        </div>
+                                        <div className="col">
+                                            <Button  variant="outline-danger" title='Delete playlist' onClick={() => setDeletePllstModal(true)}>
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </Button>
+                                        </div>
+                                    </div>
 
-                    {playlist.user_id === store.getState().auth.user.id?
-                    <>
-                    <Button  variant="outline-danger" onClick={() => setDeletePllstModal(true)}> Delete</Button>
+                                    <Modal
+                                        show={deletePllstModal} onHide={() => setDeletePllstModal(false)}
+                                        backdrop="static" keyboard={false} playlist={playlist}>
+                                        <Modal.Header closeButton>
+                                            <Modal.Title className='w-100 text-center'>Delete Playlist?</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body className='text-center'>
+                                            Are you really want to delete playlist  <span className='text-danger'><i>"{playlist.name}"</i></span>?
+                                        </Modal.Body>
+                                        <Modal.Footer className='d-flex justify-content-center'>
+                                            <Button className='mx-2' variant="secondary" onClick={() => setDeletePllstModal(false)}>
+                                                Close
+                                            </Button>
+                                            <Button className='mx-2' variant="danger" onClick={async() => {
+                                                await sendForm(`playlists/${playlist.id}/delete`);
+                                                setDeletePllstModal(false)
+                                                history.push('/user')}}>Delete</Button>
+                                        </Modal.Footer>
+                                    </Modal>
+                                </>: <></>
+                                }
+                            </div>
+
+                            <Link className="link-secondary mb-2" title='Author' to='#'><FontAwesomeIcon className='me-2' icon={faUserAstronaut} />  {playlist.user_name}</Link>
+                            <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faCompactDisc} /> {playlist?.tracks?.length} Tracks</p>
+                            <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faAlignCenter} /> {playlist.description}</p>
+                        </div>
+
                     
-                    <Modal
-                        show={deletePllstModal} onHide={() => setDeletePllstModal(false)}
-                        backdrop="static" keyboard={false} playlist={playlist}>
-                        <Modal.Header closeButton>
-                            <Modal.Title className='w-100 text-center'>Delete Playlist?</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body className='text-center'>
-                            Are you really want to delete playlist  <span className='text-danger'><i>"{playlist.name}"</i></span>?
-                        </Modal.Body>
-                        <Modal.Footer className='d-flex justify-content-center'>
-                            <Button className='mx-2' variant="secondary" onClick={() => setDeletePllstModal(false)}>
-                            Close
-                            </Button>
-                            <Button className='mx-2' variant="danger" onClick={async() => {
-                            await sendForm(`playlists/${playlist.id}/delete`);
-                            setDeletePllstModal(false)
-                            history.push('/user')}}>Delete</Button>
-                        </Modal.Footer>
-                        </Modal>
-                    </>: <></>
-                    }
+                        <div className="w-100">
+                            <div className='d-flex'>
+                                <div className='row g-2'>
+                                    <div className="col">
+                                        <Button className='d-flex align-items-center' variant="outline-light" title='Play' onClick={async() => {
+                                            store.dispatch(actionFullSetPlaylist(playlist.tracks));
+                                            store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
+                                            //store.dispatch(actionFullSetTrackCount(0));
+                                        }}>
+                                            <FontAwesomeIcon className='me-2' icon={faPlay}/>
+                                            Play
+                                        </Button>
+                                    </div>
+                                    <div className="col">
+                                        <button type="button" className="btn btn-outline-danger">
+                                            <FontAwesomeIcon icon={faHeart}/> 
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <p>Playlist author: {playlist.user_name}</p>
 
-                    {playlist.user_id === store.getState().auth.user.id? 
-
-                    <><span onClick={() => setModalTrackShow(true)}>Edit Playlist</span>
-                    <EditPlaylistModal  show={modalTrackShow} playlist={playlist}
-                            onHide={() => setModalTrackShow(false)}></EditPlaylistModal></> : <></>}
-                    <p>{playlist?.tracks?.length} треков</p> 
-                    <div className='d-flex'>
-                    {/* <div> <button type="button" className="btn btn-light me-2">Shake</button></div> */}
-                    <div> <button type="button" className="btn btn-light"
-                    onClick={async() => {
-                        store.dispatch(actionFullSetPlaylist(playlist.tracks));
-                        store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
-                        store.dispatch(actionFullSetTrackCount(0));
-                        //store.dispatch(actionFullSetTrack(0));
-                    }}
-                    
-                    >Play</button></div>
-                    
-                    {playlist.user_id === store.getState().auth.user.id? 
-                    (<>
-                        <Button variant="primary" onClick={() => setModalShow(true)}>
-                            Add Tracks
-                        </Button>
-
-                        <LoadTrackModal
-                            
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
-                        /></>) : <></>}
-                    
+                    </div>
                 </div>
-                </div>
-                {/* <div>
-                {playlist.user_id === store.getState().auth.user.id ? 
-                    <FontAwesomeIcon icon={faTrashCan} /> : <></>}
-                </div> */}
             </div>
-                <СAllTracks />
+            <СAllTracks />
         </div>
-      </div>
+    </div>
       
-      
-      </>
+    </>
   )}
 
   
-  export const CPlaylistById = connect(state => ({playlist: state.promise.plstById?.payload || {},
-    tracks: state.player?.playlist?.tracks}) || [] )(PlaylistById);
+//   export const CPlaylistById = connect(state => ({playlist: state.promise.plstById?.payload || {},
+//     tracks: state.player?.playlist?.tracks}) || [] )(PlaylistById);
+
+export const CPlaylistById = connect(state => ({playlist: state.promise.plstById?.payload || {},
+    tracks: state.promise.plstById?.payload?.tracks}) || [] )(PlaylistById);
+
+    

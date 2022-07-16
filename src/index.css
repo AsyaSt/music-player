@@ -25,13 +25,12 @@ code {
   text-decoration: none;
 }
 
-/* dkfjksdflk */
+.rounded-5 {
+  border-radius: 20px!important;
+}
+
 .player{
-  height: 95vh;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  padding-top: 20px;
 }
 .wrapper{
   border: 1px solid transparent;
@@ -46,16 +45,10 @@ code {
   justify-content: center;
 }
 .track-art{
-  /* margin: 25px; */
   height: 250px;
   width: 250px;
-  /* border: 2px solid #fff; */
   background-size: cover;
   background-position: center;
-  /* border-radius: 50%; */
-  /* -moz-box-shadow: 0px 6px 5px #ccc;
-  -webkit-box-shadow:0px 6px 5px #ccc;
-  box-shadow: 0px 6px 5px #ccc; */
   -moz-border-radius:20px;
   -webkit-border-radius:20px;
   border-radius: 20px;
@@ -74,7 +67,6 @@ code {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* margin-bottom: 30px; */
 }
 .active{
   color: black;

@@ -8,13 +8,14 @@ import image from '../images/card.png';
 import Modal from 'react-bootstrap/Modal';
 // import Button from 'react-bootstrap/Button';
 import {CreatePlaylist} from './createPlaylist'
-import { Header } from './header';
 
 
 
 const Playlist = ({playlist = {}}) => 
   <div className="col-sm-3 p-1">
-    <Link className="card" to= {`/playlist/${playlist.id}`} onClick={() => store.dispatch(actionFullSetPlaylist({playlist}) )}>
+    <Link className="card" to= {`/playlist/${playlist.id}`} 
+    // onClick={() => store.dispatch(actionFullSetPlaylist({playlist}) )}
+    >
       <img src={playlist.photo || image} className="card-img-top" alt="..."  height={'150px'}/>
       <div className="card-body">
         <h5 className="card-title"> {playlist.name}</h5>

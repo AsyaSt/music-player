@@ -2,7 +2,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {connect}   from 'react-redux';
 import React, {useState} from 'react';
-import { sendForm } from './LoadTrackModal';
+// import { sendForm } from './LoadTrackModal';
+import { sendForm } from './SendForm';
 
 
 export function EditPlaylistModal  (props)  {

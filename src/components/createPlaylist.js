@@ -1,29 +1,30 @@
 import React, {useState} from 'react';
+import { sendForm } from './SendForm';
 // import {Link} from 'react-router-dom';
 // import { actionAuthLogin } from '../store/authReducer';
 // import { store } from '../store/store';
 
 
 
-function sendForm (url, data) {
-    fetch(`http://player-api/api/${url}`, {
-        method: 'POST',
-        body: data,
-        headers: {
+// function sendForm (url, data) {
+//     fetch(`http://player-api/api/${url}`, {
+//         method: 'POST',
+//         body: data,
+//         headers: {
           
-          ...(localStorage.authToken ? {"Authorization": "Bearer " + localStorage.authToken} : {})
+//           ...(localStorage.authToken ? {"Authorization": "Bearer " + localStorage.authToken} : {})
           
-          },
-      }).then(res => res.json())
-      .then(data => {
-          if(data.token) {
-            console.log(data)
-            return data
-          } else {
-            //console.log(data.login[0]); 
-          }
-      })
-}
+//           },
+//       }).then(res => res.json())
+//       .then(data => {
+//           if(data.token) {
+//             console.log(data)
+//             return data
+//           } else {
+//             //console.log(data.login[0]); 
+//           }
+//       })
+// }
 
 
 export const CreatePlaylist = (props) => {

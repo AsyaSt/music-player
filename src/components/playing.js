@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, {useState, useEffect} from 'react';
 import {faVolumeDown, faVolumeUp, faRandom, faStepBackward, faStopCircle, faStepForward, faPlayCircle, faRepeat} from '@fortawesome/free-solid-svg-icons'
 import { store } from '../store/store';
-import {actionFullGetDuration, actionFullSetTrack, actionFullPlay, actionFullPause, actionFullSetVolume, actionPrevTrack, actionNextTrack} from '../store/playerReducer';
+import {actionFullGetDuration, actionFullSetTrack, actionFullPlay, actionFullPause, actionFullSetVolume, actionPrevTrack, actionNextTrack, actionSetRepeat} from '../store/playerReducer';
 import {Provider, connect}   from 'react-redux';
 import { audio } from './Tracks';
 import img_album from '../images/default_album.gif'
@@ -79,7 +79,7 @@ return(
                 <FontAwesomeIcon icon={faStepBackward} className='fa-2x'/>
                 
             </div>
-            <div className="random-track" 
+            <div className="play-track" 
               onClick={() => {
                 if(store.getState()?.player?.isPlaying === true) {
                     store.dispatch(actionFullPause());
@@ -92,18 +92,16 @@ return(
             </div>
             <div className="next-track"
               onClick={() => {
-                console.log(props.track);
-                store.dispatch(actionNextTrack(props.track));
-
+                store.dispatch(actionNextTrack({track: props.track, end:'false'}));
                 }
               }
              >
                 <FontAwesomeIcon icon={faStepForward} className='fa-2x'/>
             </div>
             <div className="random-track" 
-            // onClick={repeatTrack()}
+             onClick={() => (props.repeat === 1 ? store.dispatch(actionSetRepeat(2)) : store.dispatch(actionSetRepeat(1)))}
             >
-                <FontAwesomeIcon icon={faRepeat} className='fa-2x'/>
+                <FontAwesomeIcon icon={faRepeat} className={props.repeat === 1 ? 'fa-2x' : 'fa-3x'}/>
             </div>
 
         </div>
@@ -114,5 +112,6 @@ return(
 
   export const СNowPlayingPlayer = connect(state => ({track: state.player?.track || [], 
     duration: state.player?.duration || '00:00',
-     isPlaying: state.player?.isPlaying || false,
-    currentTime: state.player?.currentTime || '00:00' }) )(NowPlayingPlayer);
+    isPlaying: state.player?.isPlaying || false,
+    currentTime: state.player?.currentTime || '00:00',
+    repeat: state.player?.repeat || 1}) )(NowPlayingPlayer);

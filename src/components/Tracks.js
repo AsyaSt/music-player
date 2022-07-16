@@ -1,39 +1,92 @@
 import {connect}   from 'react-redux';
 import {actionFullSetTrack, actionFullPlay, actionFullSetPlaylist, actionFullSetTrackCount} from '../store/playerReducer';
-import { actionNowPlaylist} from '../store/promiseReducer';
+import { actionNowPlaylist, actionPlaylistById} from '../store/promiseReducer';
 import { store } from '../store/store';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { sendForm } from './SendForm';
+import React, {useState} from 'react';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlay, faUserAstronaut} from "@fortawesome/free-solid-svg-icons";
+import { Link } from 'react-router-dom';
 
 
 export let audio = new Audio();
 
+
+const ButtonDeleteTrack = (track) => {
+    const [deletePllstModal, setDeletePllstModal] = useState(false);
+    let id = store.getState().plstById?.payload?.id;
+    return (
+    <>
+        <Button  variant="outline-danger" onClick={() => {console.log(track); setDeletePllstModal(true)}}> Delete</Button>
+            <Modal
+                show={deletePllstModal} onHide={() => setDeletePllstModal(false)}
+                backdrop="static" keyboard={false} track={track}>
+                <Modal.Header closeButton>
+                    <Modal.Title className='w-100 text-center'>Delete Track?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='text-center'>
+                    Are you really want to delete track  <span className='text-danger'><i>"{track.track.name}" - {track.track?.id3?.artist}</i></span>?
+                </Modal.Body>
+                <Modal.Footer className='d-flex justify-content-center'>
+                    <Button className='mx-2' variant="secondary" onClick={() => setDeletePllstModal(false)}>
+                    Close
+                    </Button>
+                    <Button track={track} className='mx-2' variant="danger" onClick={async() => {
+                        const data = new FormData();
+                        data.append('playlistId', track.track?.pivot?.playlist_id);
+                        data.append('trackId',  track.track?.pivot?.track_id);
+                        await sendForm(`playlists/remove-track`, data);
+                        setDeletePllstModal(false);
+
+                        setTimeout(() => store.dispatch(actionPlaylistById(id)), 1000)
+                    }}>Delete</Button>
+                </Modal.Footer>
+                </Modal>
+                </>
+    )
+}
+
+
 const Track = ({track = {}, trackone={}, playlist={}, plstnow={}},  key) => 
 <tr>
-    <th scope="row">{'#'}</th>
-    <td>          
-        <div onClick={async () => {
+<td scope="row" width={30} data-id={track.id}>
+    <div className="col">
+        <Button variant="outline-light" className='rounded-5'  title='Play' onClick={async () => {
             store.dispatch(actionFullSetPlaylist(playlist.tracks));
             store.dispatch(actionFullSetTrack(playlist.tracks[playlist.tracks.indexOf(track)]));
             store.dispatch(actionNowPlaylist(store.getState().player?.track?.pivot?.playlist_id));
             store.dispatch(actionFullPlay());
         }}>
-            {track.name}
-        </div>
+            <FontAwesomeIcon className='' icon={faPlay}/>
+        </Button>
+    </div>
+</td>
+    <td>          
+        <Link className="link-light" to='#'>  {track.name}</Link>
     </td>
     <td>
-        <span>{track.id3.artist}</span>
+        <Link className="link-light" to='#'>  {track.id3.artist}</Link>
     </td>
-    <td>{track.id3.getAlbum}</td>
+    <td> 
+        <Link className="link-light" to='#'> {track.id3.getAlbum}</Link>
+    </td>
+    <td>
+    {playlist?.user_id === store.getState().auth.user.id? <ButtonDeleteTrack track={track} /> : <button>V</button>}
+    </td>
 </tr>
 
 
-const TracksAll = ({tracks=[]}) => 
-<table className="table table-dark table-striped table-dark table-hover">
+const TracksAll = ({tracks=[], playlist={}}) => 
+<table className="table table-dark table-hover align-middle">
     <thead>
         <tr>
-            <th scope="col">#</th>
+            <th scope="col" width={30}></th>
             <th scope="col">Track name</th>
             <th scope="col">Artist</th>
             <th scope="col">Album</th>
+            <th scope='col'>{playlist?.user_id === store.getState().auth.user.id? 'X' : 'V'}</th>
         </tr>
 </thead>
     <tbody>
