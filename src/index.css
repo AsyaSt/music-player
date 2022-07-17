@@ -31,11 +31,20 @@ code {
 .playlist-img-box{
   min-height: 250px;
   min-width: 250px;
+  max-height: 250px;
+  max-width: 250px;
   overflow: hidden;
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 .playlist-play-box{
   bottom: 15px;
   right: 15px;
+}
+.preview-tracks-block{
+  max-height: 200px;
+  overflow:auto;
 }
 .playlist-grey-box{
   background: rgba(0, 0, 0, 0.54);

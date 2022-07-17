@@ -101,8 +101,12 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
                             </div>
 
                             <Link className="link-secondary mb-2" title='Author' to='#'><FontAwesomeIcon className='me-2' icon={faUserAstronaut} />  {playlist.user_name}</Link>
-                            <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faCompactDisc} /> {playlist?.tracks?.length} Tracks</p>
-                            <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faAlignCenter} /> {playlist.description}</p>
+                            <p className='text-white-50 mb-2'>
+                                <FontAwesomeIcon className='me-2' icon={faCompactDisc} /> {playlist?.tracks?.length} Tracks
+                            </p>
+                            <p className='text-white-50 mb-2'>
+                                <FontAwesomeIcon className='me-2' icon={faAlignCenter} /> {playlist.description ?? "There could be a description here, but I'm too lazy"}
+                            </p>
                         </div>
 
                     

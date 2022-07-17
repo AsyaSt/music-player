@@ -7,13 +7,23 @@ import Modal from 'react-bootstrap/Modal';
 import { sendForm } from './SendForm';
 import React, {useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlay} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faPlay} from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown , Form} from 'react-bootstrap';
 
 
 export let audio = new Audio();
 
+//!  --------
+// // const playlists = store.getState().promise?.usersPlaylists?.payload?.playlists;
+
+// const playlistOption = (playlists = null) => {
+//     // if (playlists) {
+//         // console.log(playlists)
+//         return <option value={"1"}>Add to...</option>
+//     // }
+// }
+//! ------
 
 const ButtonDeleteTrack = (track) => {
     const [deletePllstModal, setDeletePllstModal] = useState(false);
@@ -77,7 +87,16 @@ const Track = ({track = {}, trackone={}, playlist={}, plstnow={}},  key) =>
             <Dropdown.Toggle variant="outline-light" id="dropdown-basic"></Dropdown.Toggle>
 
             <Dropdown.Menu variant={"dark"}>
-                {playlist?.user_id === store.getState().auth.user.id ? <ButtonDeleteTrack track={track} /> : <Dropdown.Item>Add to Playlist</Dropdown.Item>}
+            {playlist?.user_id === store.getState().auth.user.id ? <ButtonDeleteTrack track={track} /> :
+
+            <Form className="input-group d-flex">
+                <select className="dropdown-item w-auto" id="inputGroupSelect04"
+                        aria-label="Example select with button addon">
+                    {/* {playlistOption()} */}
+                </select>
+                <button type={"submit"} className="btn btn-outline-secondary w-auto"><FontAwesomeIcon icon={faCheck}/></button>
+            </Form>
+}
                 <Dropdown.Item onClick={() => {
                                                     store.dispatch(actionAddTrackToQueue(track))
                                                 }}>Add to Queue</Dropdown.Item>
@@ -110,6 +129,6 @@ export const СAllTracks = connect(state => ({playlist: state.promise.plstById?.
                                  plstnow: state.promise?.plstnow || {}} ), )(TracksAll);
 
 export const CTrack = connect(state => ({playlist: state.promise.plstById?.payload || {},
-    tracks: state.promise?.plstById?.payload?.tracks || [],
-    trackone: state.player?.playlist || [],
-    plstnow: state.promise?.plstnow || {}} ), )(Track);
+                                tracks: state.promise?.plstById?.payload?.tracks || [],
+                                trackone: state.player?.playlist || [],
+                                plstnow: state.promise?.plstnow || {}} ), )(Track);

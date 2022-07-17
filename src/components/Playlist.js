@@ -7,12 +7,7 @@ import { actionFullSetPlaylist, actionFullSetTrack } from '../store/playerReduce
 import { actionPlaylistById} from '../store/promiseReducer';
 import image from '../images/card.png';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faAlignCenter,
-    faCompactDisc,
-    faHeadphonesSimple, faPlay,
-    faPlus
-} from "@fortawesome/free-solid-svg-icons";
+import {faCompactDisc, faPlay} from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
 
 const Playlist = ({playlist = {}}) => 
@@ -57,9 +52,14 @@ const Playlist = ({playlist = {}}) =>
 
 
 const PlaylistsAll = ({playlists= []}) => 
+<>
+  <div className="d-flex justify-content-between align-items-center py-3">
+    <h3 className="text-uppercase"> <FontAwesomeIcon icon={faCompactDisc} className="me-2"/>Playlists</h3>
+  </div>
 <div className='RootCategories d-flex justify-content-start flex-wrap'>
   {playlists.map((playlist, i) => <Playlist key={i} playlist={playlist}/>)}
 </div>
+</>
 
 
 export const CAllPlaylists = connect(state => ({playlists: state.promise.allPlaylists?.payload?.playlists?.data || []}), )(PlaylistsAll);

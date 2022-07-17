@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import React, {useState} from 'react';
 // import { sendForm } from './LoadTrackModal';
 import { sendForm } from './SendForm';
+import {Form, Image} from "react-bootstrap";
 
 
 export function EditPlaylistModal  (props)  {
@@ -22,38 +23,41 @@ export function EditPlaylistModal  (props)  {
 
         sendForm('playlists/' + props.playlist?.id + '/edit', data);  
     } 
+    const PreViewImage = (image) => {
+        if (image && typeof (image) !== "string") {
+            return <div className="d-flex justify-content-center">
+                        <label htmlFor="fileImage" className='me-4 playlist-img-box rounded-5 cursor-pointer' style={{backgroundImage: `url(${URL.createObjectURL(image)})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}></label>
+                    </div>
+            }
+    }
 
     return(
-    <Modal
+        <Modal
         {...props}
-        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
     >
         <Modal.Header closeButton> 
-        <Modal.Title id="contained-modal-title-vcenter"></Modal.Title> 
+            <Modal.Title id="contained-modal-title-vcenter">Edit Playlist</Modal.Title>
         </Modal.Header>
         <Modal.Body >
-        <form onSubmit={PostEditPlaylist} className="authorization center align-items-center justify-content-center  d-flex" id='loadTracksForm'>
-            <div className="border p-3 col-9">
-                <h4 className="w-100 text-center">Edit Playlist</h4>
-                <hr/>
-                <div className="d-flex justify-content-between">
-                    <div className="w-auto">
-                        <label  className="form-label">Image</label>
-                        <input type="file" name="picture" accept="image/*" id="file" className='form-control mb-3' onChange={(e) => setImage(e.target.files[0])} multiple={false}/>
-                        {/* <input className="form-check-input me-3" type="checkbox" id="flexCheckIndeterminate" checked={privat} onChange={e => setPrivat(e.target.checked? 1 : 0)}/>
-                        <label className="form-check-label" >Private?</label>     */}
-                    </div>
-                    <div className="w-50">
-                        <label  className="form-label">Name</label><br/>
-                        <input type="text" id="username" className='input form-control mb-3' value={name} onChange={e => setName(e.target.value)}/>
-                        <label  className="form-label">Description</label>
-                        <textarea type="password" id="password" className='form-control mb-3' value={description || ''} onChange={e => setDescription(e.target.value)}/>
-                    </div>
-                </div>
-            </div>
-        </form>
+            <Form onSubmit={PostEditPlaylist} id='loadTracksForm'>
+                {PreViewImage(image)}
+                <Form.Group className="mb-3" >
+                    <Form.Label>Image</Form.Label>
+                    <Form.Control type="file" name="picture" accept="image/*" id="fileImage" className='form-control mb-3' onChange={(e) => {
+                        setImage(e.target.files[0]);
+                    }} multiple={false} />
+                </Form.Group>
+                <Form.Group className="mb-3" >
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" id="username" className='input form-control mb-3' value={name} onChange={e => setName(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3" >
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control as="textarea" name="description" rows={3}  id="description" className='form-control mb-3' value={description || ''} onChange={e => setDescription(e.target.value)} />
+                </Form.Group>
+            </Form>
         </Modal.Body>
         <Modal.Footer> 
         <Button variant="outline-danger" type='submit' form='loadTracksForm' onClick={props.onHide}>Save</Button> 

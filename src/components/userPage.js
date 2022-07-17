@@ -50,7 +50,7 @@ const Playlist = ({playlist = {}}) =>
   export const UsersPlaylistsAll = ({playlists= []}) => {
     const [modalShow, setModalShow] = React.useState(false);
     return (
-  <>
+  <> 
       <div className="d-flex justify-content-between align-items-center py-3">
           <h3 className="text-uppercase"> <FontAwesomeIcon icon={faHeadphonesSimple} className="me-2"/>My playlists</h3>
           <Button  variant="outline-success" title='Delete playlist' onClick={() => setModalShow(true)}>

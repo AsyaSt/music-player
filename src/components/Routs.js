@@ -9,6 +9,8 @@ import {CPlaylistById}  from './playlistById';
 import {СNowPlayingPlayer} from './playing'
 import { CEditProfile } from './EditProfile';
 import { Header } from './header';
+import { ArtistPage } from '../pages/artistPage';
+import { AlbumPage } from '../pages/albumPage';
 
 export const Main = ({auth}) =>
 
@@ -26,6 +28,8 @@ export const Main = ({auth}) =>
           <Route path={'/allplaylists'} component={Aside}/>
           <Route path={'/playlist'} component={CPlaylistById} />
           <Route path={'/user'} component={UserPage} />
+          <Route path={'/artist'} component={ArtistPage} />
+          <Route path={'/album'} component={AlbumPage} />
           <Route exact path="/">{auth ? <Redirect to="/user"/> : <Redirect to="/login" /> }</Route>
         </Switch>
       </div>
