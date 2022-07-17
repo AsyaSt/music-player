@@ -11,7 +11,7 @@ import {faTrash,
     faPlus,
     faAlignCenter,
     faPlay, faHeart} from '@fortawesome/free-solid-svg-icons'
-import { actionFullSetPlaylist, actionFullSetTrack} from '../store/playerReducer';
+import { actionFullSetPlaylist, actionFullSetTrack, actionAddPlaylistToQueue} from '../store/playerReducer';
 import {connect}   from 'react-redux';
 import {СAllTracks } from './Tracks'
 import { LoadTrackModal } from './LoadTrackModal';
@@ -46,8 +46,8 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
     <div className='d-flex justify-content-around w-100'>
         <div className='w-100 pt-4'>
             <div className='d-flex mb-3 w-100'>
-            <div className='me-4 playlist-img-box rounded-5' style={{backgroundImage: `url(${playlist.photo})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
-                    {/*<img className='rounded-5 playlist-img' src={playlist.photo} width ='250px' alt='...'/>*/}
+                <div className='me-4 playlist-img-box rounded-5' 
+                    style={{backgroundImage: `url(${playlist.photo})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
                 </div>
                 <div className='w-100'>
                     <div className="d-flex flex-column justify-content-between h-100">
@@ -79,7 +79,7 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
 
                                     <Modal
                                         show={deletePllstModal} onHide={() => setDeletePllstModal(false)}
-                                        backdrop="static" keyboard={false} playlist={playlist}>
+                                         keyboard={false} playlist={playlist}>
                                         <Modal.Header closeButton>
                                             <Modal.Title className='w-100 text-center'>Delete Playlist?</Modal.Title>
                                         </Modal.Header>
@@ -124,17 +124,11 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
                                             <Dropdown.Toggle split variant="outline-light" id="dropdown-split-basic"/>
 
                                             <Dropdown.Menu variant="dark">
-                                                <Dropdown.Item href="#/action-1">Add to Queue</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => {
+                                                    store.dispatch(actionAddPlaylistToQueue(playlist.tracks))
+                                                }}>Add to Queue</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
-                                        {/* <Button className='d-flex align-items-center' variant="outline-light" title='Play' onClick={async() => {
-                                            store.dispatch(actionFullSetPlaylist(playlist.tracks));
-                                            store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
-                                            //store.dispatch(actionFullSetTrackCount(0));
-                                        }}>
-                                            <FontAwesomeIcon className='me-2' icon={faPlay}/>
-                                            Play
-                                        </Button> */}
                                     </div>
                                     <div className="col">
                                         <button type="button" className="btn btn-outline-danger">

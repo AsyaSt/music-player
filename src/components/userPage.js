@@ -2,6 +2,8 @@ import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {connect}   from 'react-redux';
 import { actionUsersPlaylists } from '../store/promiseReducer';
+import { actionPlaylistById} from '../store/promiseReducer';
+import { actionFullSetPlaylist, actionFullSetTrack} from '../store/playerReducer';
 import { store } from '../store/store';
 import image from '../images/card.png';
 import {CreatePlaylist} from './createPlaylist';
@@ -16,6 +18,7 @@ import {
 import Button from "react-bootstrap/Button";
 
 
+
 const Playlist = ({playlist = {}}) => 
   <div className="">
       <div className="me-4 mb-4 p-4 playlist-img-box rounded-5 position-relative"
@@ -27,7 +30,19 @@ const Playlist = ({playlist = {}}) =>
               {playlist.name}
           </Link>
           <Button variant="outline-light" className='rounded-5 position-absolute playlist-play-box'  title='Play'>
-              <FontAwesomeIcon className='' icon={faPlay}/>
+              <FontAwesomeIcon className='' icon={faPlay}
+                onClick={() => {
+                  store.dispatch(actionPlaylistById(playlist.id));
+                  setTimeout(() => {
+                      if(store.getState().promise?.plstById?.payload?.tracks) {
+                        let tracks = store.getState().promise?.plstById?.payload?.tracks;
+                        store.dispatch(actionFullSetPlaylist(tracks));
+                        store.dispatch(actionFullSetTrack(store.getState().player?.playlist[0]));
+                    }
+                    }
+                    , 500) 
+                }}
+              />
           </Button>
       </div>
   </div>

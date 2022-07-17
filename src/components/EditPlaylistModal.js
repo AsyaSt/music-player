@@ -16,7 +16,7 @@ export function EditPlaylistModal  (props)  {
         const data = new FormData();
 
         data.append("name", name || props.playlist?.name);
-        data.append("description", description || props.playlist?.description || '');
+        (description !== props.playlist?.description) && data.append("description", description);
         data.append("private", props.playlist?.private);
         image.name && data.append("photo",  image, image.name);
 

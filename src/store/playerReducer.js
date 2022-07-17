@@ -1,7 +1,7 @@
 import { store } from '../store/store';
 import { audio } from '../components/Tracks';
 
-export const playerReducer = function(state = {}, {type, duration, track, playlist, playlistIndex, currentTime, volume,  repeat=1, random=1}) {
+export const playerReducer = function(state = {}, {type, duration, track, playlist, currentTime, volume,  repeat=1, random=1}) {
     if (!state) {
         return {};
     }
@@ -42,8 +42,7 @@ export const playerReducer = function(state = {}, {type, duration, track, playli
     } if (type === 'SET_PLAYLIST') {
         return {
             ...state,
-            playlist,
-            playlistIndex
+            playlist
         }
     } if (type === 'SET_REPEAT'){
         return {
@@ -130,7 +129,7 @@ export const actionNextTrack = (track) =>
                 setTimeout(() => { dispatch(actionFullSetTrack(playlist[count]));
                 dispatch(actionFullPlay()) }, 100)
             }
-            else if (repeat === 1 && count === (playlist.length - 1)) {
+            else if (repeat !== 2 && count === (playlist.length - 1)) {
                 setTimeout(() => { dispatch(actionFullSetTrack(playlist[0])); dispatch(actionFullPlay()) }, 100)
             }
             else {
@@ -176,5 +175,23 @@ export const actionPlayerRandom = () =>
             ]))
             
         }
-        
+    }
+
+export const actionAddTrackToQueue = (track) => 
+    async (dispatch, getState) => {
+        if (getState().player?.playlist) {
+            let newPlaylist = [...getState().player.playlist, track];
+            console.log(newPlaylist);
+            dispatch(actionSetPlaylist([...newPlaylist]))
+            
+        }
+    }
+
+    export const actionAddPlaylistToQueue = (tracks) => 
+    async (dispatch, getState) => {
+        if (getState().player?.playlist) {
+            let newPlaylist = [...getState().player.playlist, ...tracks];
+            console.log(newPlaylist);
+            dispatch(actionSetPlaylist([...newPlaylist])) 
+        }
     }

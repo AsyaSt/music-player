@@ -1,5 +1,5 @@
 import {connect}   from 'react-redux';
-import {actionFullSetTrack, actionFullPlay, actionFullSetPlaylist, actionFullSetTrackCount} from '../store/playerReducer';
+import {actionFullSetTrack, actionFullPlay, actionFullSetPlaylist , actionAddTrackToQueue} from '../store/playerReducer';
 import { actionNowPlaylist, actionPlaylistById} from '../store/promiseReducer';
 import { store } from '../store/store';
 import Button from 'react-bootstrap/Button';
@@ -7,7 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import { sendForm } from './SendForm';
 import React, {useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlay, faUserAstronaut} from "@fortawesome/free-solid-svg-icons";
+import {faPlay} from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 
@@ -17,11 +17,9 @@ export let audio = new Audio();
 
 const ButtonDeleteTrack = (track) => {
     const [deletePllstModal, setDeletePllstModal] = useState(false);
-    let id = store.getState().plstById?.payload?.id;
     return (
     <>
-        <Dropdown.Item href="#/action-1"  onClick={() => {console.log(track); setDeletePllstModal(true)}}>Delete</Dropdown.Item>
-        {/* <Button  variant="outline-danger" onClick={() => {console.log(track); setDeletePllstModal(true)}}> Delete</Button> */}
+        <Dropdown.Item  onClick={() => {console.log(track); setDeletePllstModal(true)}}>Delete</Dropdown.Item>
             <Modal
                 show={deletePllstModal} onHide={() => setDeletePllstModal(false)}
                 backdrop="static" keyboard={false} track={track}>
@@ -42,7 +40,7 @@ const ButtonDeleteTrack = (track) => {
                         await sendForm(`playlists/remove-track`, data);
                         setDeletePllstModal(false);
 
-                        setTimeout(() => store.dispatch(actionPlaylistById(id)), 1000)
+                        setTimeout(() => store.dispatch(actionPlaylistById(track.track?.pivot?.playlist_id)), 100)
                     }}>Delete</Button>
                 </Modal.Footer>
                 </Modal>
@@ -74,16 +72,15 @@ const Track = ({track = {}, trackone={}, playlist={}, plstnow={}},  key) =>
     <td> 
         <Link className="link-light" to='#'> {track.id3.getAlbum}</Link>
     </td>
-    {/* <td>
-    {playlist?.user_id === store.getState().auth.user.id? <ButtonDeleteTrack track={track} /> : <button>V</button>}
-    </td> */}
     <td align={"right"}>
         <Dropdown align={"end"}>
             <Dropdown.Toggle variant="outline-light" id="dropdown-basic"></Dropdown.Toggle>
 
             <Dropdown.Menu variant={"dark"}>
-                {playlist?.user_id === store.getState().auth.user.id ? <ButtonDeleteTrack track={track} /> : <Dropdown.Item href="#/action-3">Add to Playlist</Dropdown.Item>}
-                <Dropdown.Item href="#/action-2">Add to Queue</Dropdown.Item>
+                {playlist?.user_id === store.getState().auth.user.id ? <ButtonDeleteTrack track={track} /> : <Dropdown.Item>Add to Playlist</Dropdown.Item>}
+                <Dropdown.Item onClick={() => {
+                                                    store.dispatch(actionAddTrackToQueue(track))
+                                                }}>Add to Queue</Dropdown.Item>
                 
             </Dropdown.Menu>
         </Dropdown>
