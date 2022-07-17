@@ -60,62 +60,62 @@ export const playerReducer = function(state = {}, {type, duration, track, playli
 
 
 const actionPlay = () => ({type:'PLAY'})
-export const actionFullPlay = () =>
-    dispatch => {  
-        audio.play();
-        dispatch(actionPlay());
-        audio.onloadedmetadata = (() => dispatch(actionFullGetDuration(audio.duration)));
-        audio.ontimeupdate = () =>  dispatch(actionFullSetCurrentTime(audio.currentTime));
-        actionFullSetCurrentTime(audio.currentTime);
-        actionSetRepeat(1);
-    }
+    export const actionFullPlay = () =>
+        dispatch => {  
+            audio.play();
+            dispatch(actionPlay());
+            audio.onloadedmetadata = (() => dispatch(actionFullGetDuration(audio.duration)));
+            audio.ontimeupdate = () =>  dispatch(actionFullSetCurrentTime(audio.currentTime));
+            actionFullSetCurrentTime(audio.currentTime);
+            actionSetRepeat(1);
+        }
  
 
 const actionPause = () => ({type:'PAUSE'})
-export const actionFullPause = () =>
-    dispatch => {
-        audio.pause();
-        dispatch(actionPause());
-    }
+    export const actionFullPause = () =>
+        dispatch => {
+            audio.pause();
+            dispatch(actionPause());
+        }
 
 const actionSetVolume = (volume) => ({type:'SET_VOLUME', volume})
-export const actionFullSetVolume = (volume) =>
-    dispatch => {
-        audio.volume = volume / 100;
-        dispatch(actionSetVolume(volume));
-    }
+    export const actionFullSetVolume = (volume) =>
+        dispatch => {
+            audio.volume = volume / 100;
+            dispatch(actionSetVolume(volume));
+        }
 
 const actionSetTrack = (track) => ({type:'SET_TRACK', track})
-export const actionFullSetTrack = (track) =>
-    dispatch => {
-        console.log(track)
-        audio.src = `http://player-api/storage/tracks/${track?.file}`;
-        dispatch(actionSetTrack(track));
-        dispatch(actionFullPlay());
-    }
+    export const actionFullSetTrack = (track) =>
+        dispatch => {
+            console.log(track)
+            audio.src = `http://player-api/storage/tracks/${track?.file}`;
+            dispatch(actionSetTrack(track));
+            dispatch(actionFullPlay());
+        }
 
 const actionGetDuration = (duration) => ({type:'GET_DURATION', duration})
-export const actionFullGetDuration = (duration) =>
-    dispatch => {
-        dispatch(actionGetDuration(duration));
-    }
+    export const actionFullGetDuration = (duration) =>
+        dispatch => {
+            dispatch(actionGetDuration(duration));
+        }
 
 const actionSetCurrentTime = (currentTime) => ({type:'SET_CURRENT_TIME', currentTime})
-export const actionFullSetCurrentTime = (currentTime) =>
-    dispatch => {
-        const playlist = store.getState().player?.playlist;
-        const track = store.getState().player?.track;
-        const count = playlist.indexOf(track);
-        dispatch(actionSetCurrentTime(currentTime));
-        audio.onended = ()  => dispatch(actionNextTrack({track:playlist[count], end:'true'}));
-    }
+    export const actionFullSetCurrentTime = (currentTime) =>
+        dispatch => {
+            const playlist = store.getState().player?.playlist;
+            const track = store.getState().player?.track;
+            const count = playlist.indexOf(track);
+            dispatch(actionSetCurrentTime(currentTime));
+            audio.onended = ()  => dispatch(actionNextTrack({track:playlist[count], end:'true'}));
+        }
 
 
 const actionSetPlaylist = (playlist) => ({type:'SET_PLAYLIST', playlist})
-export const actionFullSetPlaylist = (playlist) =>
-    dispatch => {
-        dispatch(actionSetPlaylist(playlist));
-    }
+    export const actionFullSetPlaylist = (playlist) =>
+        dispatch => {
+            dispatch(actionSetPlaylist(playlist));
+        }
 
 
 
@@ -188,11 +188,17 @@ export const actionAddTrackToQueue = (track) =>
         }
     }
 
-    export const actionAddPlaylistToQueue = (tracks) => 
+export const actionAddPlaylistToQueue = (tracks) => 
     async (dispatch, getState) => {
         if (getState().player?.playlist) {
             let newPlaylist = [...getState().player.playlist, ...tracks];
-            console.log(newPlaylist);
             dispatch(actionSetPlaylist([...newPlaylist])) 
         }
+}
+
+export const actionRemoveTrackFromQueue = (track) => 
+    async (dispatch, getState) => {
+        let newPlaylist = getState().player.playlist.filter((oneTrack) => oneTrack !== track)
+        dispatch(actionSetPlaylist([...newPlaylist])) 
     }
+    

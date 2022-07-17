@@ -7,6 +7,7 @@ import {Provider, connect}   from 'react-redux';
 import { audio } from './Tracks';
 import img_album from '../images/default_album.gif';
 import {Nav, Tab, Tabs} from "react-bootstrap";
+import { CTrackList } from './tracklist';
 
 function msToTime(duration) {
     let hours,minutes,seconds;
@@ -38,8 +39,6 @@ export let NowPlayingPlayer = (props) => {
                     id="fill-tab-example"
                     activeKey={key}
                     onSelect={(k) => setKey(k)}
-                    className="mb-3 justify-content-center text-white"
-                    tabClassName="btn-dark"
                     fill
                 >
                     <Tab className="text-white bg-dark" tabClassName="text-white bg-dark" eventKey="home" title="Player">
@@ -60,7 +59,7 @@ export let NowPlayingPlayer = (props) => {
                                 <div className="now-playing">{props.track?.id3?.artist || 'Artist'  }</div>
                             </div>
         
-                            <div className="slider-container duration">
+                            <div className="slider-container duration w-100">
         
                                 <div className="d-flex align-items-end justify-content-between">
                                     <div className="slider-container d-flex flex-column w-75 pe-2" >
@@ -128,8 +127,8 @@ export let NowPlayingPlayer = (props) => {
                         </div>
         
                     </Tab>
-                    <Tab className="text-white bg-dark" tabClassName="text-white bg-dark"  eventKey="profile" title="Queue">
-                        asdasd
+                    <Tab className="text-white bg-dark playing-list" tabClassName="text-white bg-dark playing-list"  eventKey="profile" title="Queue">
+                        {store.getState().player?.playlist && <CTrackList/>}
                     </Tab>
                 </Tabs>
         

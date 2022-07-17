@@ -119,12 +119,9 @@ export const TracksAll = ({tracks, playlist}) =>
         </tr>
 </thead>
     <tbody>
-        {tracks.map((tracks, i) => <CTrack key={i} track={tracks} playlist={playlist}/>)}
+        {tracks.map((tracks, i) => <Track key={i} track={tracks} playlist={playlist}/>)}
     </tbody>
 </table>
 
 export const СAllTracks = connect(state => ({playlist: state.promise.plstById?.payload || {},
                                  tracks: state.promise?.plstById?.payload?.tracks || []} ), )(TracksAll);
-
-export const CTrack = connect(state => ({playlist: state.promise.plstById?.payload || {},
-                                tracks: state.promise?.plstById?.payload?.tracks || []} ), )(Track);
