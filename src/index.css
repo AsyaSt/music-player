@@ -38,6 +38,39 @@ code {
 .cursor-pointer {
   cursor: pointer;
 }
+.playlist-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-name .line {
+  /*width: 100px;*/
+  display: inline-flex;
+}
+
+.track-name .second {
+  display: inline-flex;
+  white-space: nowrap;
+  overflow: hidden;
+  animation-play-state: paused;
+}
+
+.track-name .line .second span {
+  animation: ticker 6s linear infinite;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translate(40%, 0);
+  }
+  50% {
+    transform: translate(-40%, 0);
+  }
+  100% {
+    transform: translate(40%, 0);
+  }
+}
+
 .playlist-play-box{
   bottom: 15px;
   right: 15px;

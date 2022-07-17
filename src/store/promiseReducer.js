@@ -75,3 +75,6 @@ export const actionPlaylistById = (_id) =>
 
     store.dispatch(actionAuthLogin(token));
 };
+
+export const actionArtistById = (_id) => 
+actionPromise('artistById', gql('/artist/'+_id))

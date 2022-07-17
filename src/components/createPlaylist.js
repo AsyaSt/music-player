@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { sendForm } from './SendForm';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { actionUsersPlaylists } from '../store/promiseReducer';
 import { store } from '../store/store';
 import { history } from '../App';
 
@@ -22,8 +23,8 @@ export const CreatePlaylist = (props) => {
     image && data.append("photo",  image, image.name);
     let result = await sendForm('playlists/create', data);
     console.log(result);
-    
-    history.push(`/playlist/${result.playlist.id}`)
+    store.dispatch(actionUsersPlaylists(store.getState().auth?.user?.id));
+    //history.push(`/playlist/${result.playlist.id}`)
   }
 
   return <>

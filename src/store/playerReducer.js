@@ -88,6 +88,7 @@ export const actionFullSetVolume = (volume) =>
 const actionSetTrack = (track) => ({type:'SET_TRACK', track})
 export const actionFullSetTrack = (track) =>
     dispatch => {
+        console.log(track)
         audio.src = `http://player-api/storage/tracks/${track?.file}`;
         dispatch(actionSetTrack(track));
         dispatch(actionFullPlay());

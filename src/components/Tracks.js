@@ -1,6 +1,6 @@
 import {connect}   from 'react-redux';
 import {actionFullSetTrack, actionFullPlay, actionFullSetPlaylist , actionAddTrackToQueue} from '../store/playerReducer';
-import { actionNowPlaylist, actionPlaylistById} from '../store/promiseReducer';
+import { actionNowPlaylist, actionPlaylistById, actionArtistById} from '../store/promiseReducer';
 import { store } from '../store/store';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -59,14 +59,14 @@ const ButtonDeleteTrack = (track) => {
 }
 
 
-const Track = ({track = {}, trackone={}, playlist={}, plstnow={}},  key) => 
+const Track = ({track,  playlist}) => 
 <tr>
 <td scope="row" width={30} data-id={track.id}>
     <div className="col">
         <Button variant="outline-light" className='rounded-5'  title='Play' onClick={async () => {
-            store.dispatch(actionFullSetPlaylist(playlist.tracks));
-            store.dispatch(actionFullSetTrack(playlist.tracks[playlist.tracks.indexOf(track)]));
-            store.dispatch(actionNowPlaylist(store.getState().player?.track?.pivot?.playlist_id));
+            console.log(playlist.tracks, playlist?.tracks[playlist?.tracks.indexOf(track)]);
+            playlist.tracks && store.dispatch(actionFullSetPlaylist(playlist?.tracks));
+            playlist.tracks ? store.dispatch(actionFullSetTrack(playlist?.tracks[playlist?.tracks.indexOf(track)])) : store.dispatch(actionFullSetTrack(track))
             store.dispatch(actionFullPlay());
         }}>
             <FontAwesomeIcon className='' icon={faPlay}/>
@@ -76,8 +76,8 @@ const Track = ({track = {}, trackone={}, playlist={}, plstnow={}},  key) =>
     <td>          
         <Link className="link-light" to='#'>  {track.name}</Link>
     </td>
-    <td>
-        <Link className="link-light" to='#'>  {track.id3.artist}</Link>
+    <td onClick={() => store.dispatch(actionArtistById(track.artist_id))}>
+        <Link className="link-light" to={`/artist/${track.artist_id}`}>  {track.id3.artist}</Link>
     </td>
     <td> 
         <Link className="link-light" to='#'> {track.id3.getAlbum}</Link>
@@ -107,7 +107,7 @@ const Track = ({track = {}, trackone={}, playlist={}, plstnow={}},  key) =>
 </tr>
 
 
-const TracksAll = ({tracks=[], playlist={}}) => 
+export const TracksAll = ({tracks, playlist}) => 
 <table className="table table-dark table-hover align-middle">
     <thead>
         <tr>
@@ -119,16 +119,12 @@ const TracksAll = ({tracks=[], playlist={}}) =>
         </tr>
 </thead>
     <tbody>
-        {tracks.map((tracks, i) => <CTrack key={i} track={tracks}/>)}
+        {tracks.map((tracks, i) => <CTrack key={i} track={tracks} playlist={playlist}/>)}
     </tbody>
 </table>
 
 export const СAllTracks = connect(state => ({playlist: state.promise.plstById?.payload || {},
-                                 tracks: state.promise?.plstById?.payload?.tracks || [],
-                                 trackone: state.player?.playlist || [],
-                                 plstnow: state.promise?.plstnow || {}} ), )(TracksAll);
+                                 tracks: state.promise?.plstById?.payload?.tracks || []} ), )(TracksAll);
 
 export const CTrack = connect(state => ({playlist: state.promise.plstById?.payload || {},
-                                tracks: state.promise?.plstById?.payload?.tracks || [],
-                                trackone: state.player?.playlist || [],
-                                plstnow: state.promise?.plstnow || {}} ), )(Track);
+                                tracks: state.promise?.plstById?.payload?.tracks || []} ), )(Track);

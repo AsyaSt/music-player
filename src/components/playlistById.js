@@ -1,39 +1,29 @@
 import React, {useState, useEffect} from 'react';
 import { store } from '../store/store';
-import { actionPlaylistById} from '../store/promiseReducer';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faTrash,
-    faPen,
-    faUserAstronaut,
-    faCompactDisc,
-    faPlus,
-    faAlignCenter,
-    faPlay, faHeart} from '@fortawesome/free-solid-svg-icons'
+import {faTrash, faPen, faUserAstronaut, faCompactDisc,
+    faPlus, faAlignCenter, faPlay, faHeart} from '@fortawesome/free-solid-svg-icons';
 import { actionFullSetPlaylist, actionFullSetTrack, actionAddPlaylistToQueue} from '../store/playerReducer';
 import {connect}   from 'react-redux';
-import {СAllTracks } from './Tracks'
+import { TracksAll } from './Tracks';
 import { LoadTrackModal } from './LoadTrackModal';
 import { EditPlaylistModal } from './EditPlaylistModal';
 import { Link } from 'react-router-dom';
 import { sendForm } from './SendForm';
 import { history } from '../App';
 import {ButtonGroup, Dropdown} from "react-bootstrap";
+import { actionPlaylistById, actionUsersPlaylists } from '../store/promiseReducer';
 
 
-let listToPlay;
-export const PlaylistById = ({playlist = {}, tracks={}}) => {
-    
+export const PlaylistById = ({playlist, tracks}) => {
     let id = window.location.href.split('/')[4];
-    
-    const getAnswer = async () => {
-      listToPlay = await store.dispatch(actionPlaylistById(id));
-      return listToPlay;
+    const getAnswer =  () => {
+      store.dispatch(actionPlaylistById(id));
     };
 
     useEffect(() => {
-  
       getAnswer();
     }, []);
 
@@ -61,14 +51,16 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
                                             <Button  variant="outline-success" title='Add tracks' onClick={() => setModalShow(true)}>
                                                 <FontAwesomeIcon icon={faPlus} />
                                             </Button>
-                                            <LoadTrackModal id={id} show={modalShow} onHide={() => setModalShow(false)} />
+                                            <LoadTrackModal id={playlist?.id} show={modalShow} onHide={() => setModalShow(false)} />
                                         </div>
                                         <div className="col">
                                             <Button  variant="outline-secondary" title='Edit playlist' onClick={() => setModalTrackShow(true)}>
                                                 <FontAwesomeIcon icon={faPen} />
                                             </Button>
                                             <EditPlaylistModal  tracks={tracks}  show={modalTrackShow} playlist={playlist}
-                                                                onHide={() => setModalTrackShow(false)}></EditPlaylistModal>
+                                                                onHide={() => {setModalTrackShow(false);
+                                                                    setTimeout(() => store.dispatch(actionPlaylistById(playlist?.id)), 100) 
+                                                                }}></EditPlaylistModal>
                                         </div>
                                         <div className="col">
                                             <Button  variant="outline-danger" title='Delete playlist' onClick={() => setDeletePllstModal(true)}>
@@ -90,16 +82,17 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
                                             <Button className='mx-2' variant="secondary" onClick={() => setDeletePllstModal(false)}>
                                                 Close
                                             </Button>
-                                            <Button className='mx-2' variant="danger" onClick={async() => {
-                                                await sendForm(`playlists/${playlist.id}/delete`);
+                                            <Button className='mx-2' variant="danger" onClick={() => {
+                                                sendForm(`playlists/${playlist.id}/delete`);
                                                 setDeletePllstModal(false)
-                                                history.push('/user')}}>Delete</Button>
+                                                setTimeout(() => {
+                                                    store.dispatch(actionUsersPlaylists(store.getState().auth?.user?.id));
+                                                    history.push('/user');}, 100) }}>Delete</Button>
                                         </Modal.Footer>
                                     </Modal>
                                 </>: <></>
                                 }
                             </div>
-
                             <Link className="link-secondary mb-2" title='Author' to='#'><FontAwesomeIcon className='me-2' icon={faUserAstronaut} />  {playlist.user_name}</Link>
                             <p className='text-white-50 mb-2'>
                                 <FontAwesomeIcon className='me-2' icon={faCompactDisc} /> {playlist?.tracks?.length} Tracks
@@ -108,8 +101,6 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
                                 <FontAwesomeIcon className='me-2' icon={faAlignCenter} /> {playlist.description ?? "There could be a description here, but I'm too lazy"}
                             </p>
                         </div>
-
-                    
                         <div className="w-100">
                             <div className='d-flex'>
                                 <div className='row g-2'>
@@ -142,23 +133,19 @@ export const PlaylistById = ({playlist = {}, tracks={}}) => {
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
-            <СAllTracks />
+            <CAllTracks />
         </div>
     </div>
-      
-    </>
-  )}
+    </>)}
 
-  
-//   export const CPlaylistById = connect(state => ({playlist: state.promise.plstById?.payload || {},
-//     tracks: state.player?.playlist?.tracks}) || [] )(PlaylistById);
 
 export const CPlaylistById = connect(state => ({playlist: state.promise.plstById?.payload || {},
     tracks: state.promise.plstById?.payload?.tracks}) || [] )(PlaylistById);
+
+const CAllTracks = connect(state => ({tracks: state.promise?.plstById?.payload?.tracks || [],
+    playlist: state.promise.plstById?.payload || {},} ) )(TracksAll);
 
     

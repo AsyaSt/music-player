@@ -4,12 +4,13 @@ import {LoginForm} from './authorization';
 import {CRegisterForm} from './authRegistration';
 import { store } from '../store/store';
 import { Aside } from '../App';
-import { UserPage} from './userPage';
+import { CUserPage } from '../pages/userPage';
+// import { UserPage} from './userPage';
 import {CPlaylistById}  from './playlistById';
 import {СNowPlayingPlayer} from './playing'
 import { CEditProfile } from './EditProfile';
 import { Header } from './header';
-import { ArtistPage } from '../pages/artistPage';
+import { CArtistPage } from '../pages/artistPage';
 import { AlbumPage } from '../pages/albumPage';
 
 export const Main = ({auth}) =>
@@ -27,8 +28,8 @@ export const Main = ({auth}) =>
           <Route path={'/editprofile'} component={CEditProfile}/>
           <Route path={'/allplaylists'} component={Aside}/>
           <Route path={'/playlist'} component={CPlaylistById} />
-          <Route path={'/user'} component={UserPage} />
-          <Route path={'/artist'} component={ArtistPage} />
+          <Route path={'/user'} component={CUserPage} />
+          <Route path={'/artist'} component={CArtistPage} />
           <Route path={'/album'} component={AlbumPage} />
           <Route exact path="/">{auth ? <Redirect to="/user"/> : <Redirect to="/login" /> }</Route>
         </Switch>

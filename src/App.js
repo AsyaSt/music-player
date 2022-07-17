@@ -7,7 +7,7 @@ import createHistory from "history/createBrowserHistory";
 import {Provider, connect}   from 'react-redux';
 //import {createStore, combineReducers, applyMiddleware} from 'redux';
 import { store } from './store/store';
-import { actionAllPlaylists } from './store/promiseReducer';
+import { actionAllPlaylists, actionUsersPlaylists } from './store/promiseReducer';
 import { Header } from './components/header';
 import { Main } from './components/Routs';
 import {CAllPlaylists} from './components/Playlist';
@@ -18,7 +18,8 @@ import {СNowPlayingPlayer} from './components/playing';
 export let history = createHistory();
 
 store.subscribe(() => console.log(store.getState()));
-store.dispatch(actionAllPlaylists());
+store.getState().auth.token && store.dispatch(actionAllPlaylists());
+store.getState().auth.token && store.dispatch(actionUsersPlaylists(store.getState().auth?.user?.id));
 
 
 // export const CPlaylistById = connect(state => ({playlist: state.promise.plstById?.payload || {}}), )(PlaylistById);

@@ -1,9 +1,10 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import React, {useState} from 'react';
-// import { sendForm } from './LoadTrackModal';
+import { actionPlaylistById } from '../store/promiseReducer';
+import { store } from '../store/store';
 import { sendForm } from './SendForm';
-import {Form, Image} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 
 
 export function EditPlaylistModal  (props)  {
@@ -22,6 +23,7 @@ export function EditPlaylistModal  (props)  {
         image.name && data.append("photo",  image, image.name);
 
         sendForm('playlists/' + props.playlist?.id + '/edit', data);  
+        setTimeout(() => store.dispatch(actionPlaylistById(props.playlist?.id)), 100) ;
     } 
     const PreViewImage = (image) => {
         if (image && typeof (image) !== "string") {
@@ -64,6 +66,3 @@ export function EditPlaylistModal  (props)  {
         </Modal.Footer>
     </Modal>)
 }
-
-
-//export const CEditPlaylistModal = connect(state => ({playlist: state.promise.plstById?.payload || []}), )(EditPlaylistModal);
