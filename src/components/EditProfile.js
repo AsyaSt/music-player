@@ -7,6 +7,7 @@ import { actionAuthLogin } from '../store/authReducer';
 import {Link} from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import {Accordion} from "react-bootstrap";
+import {RunToast} from "./Toast";
 
 
 export async function sendForm (url, data) {
@@ -19,9 +20,11 @@ export async function sendForm (url, data) {
       }).then(res => res.json())
       .then(data => {
           if(data.user) {
+            RunToast('bg-success','Success', 'Profile updated')
             store.dispatch(actionAuthLogin(store.getState().auth?.token, data.user));
             return data
           } else if(data.login){
+            RunToast('bg-danger','Error', 'Login should be unique')
             return data.login[0];
           } else{
             return data;

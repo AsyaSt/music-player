@@ -25,7 +25,7 @@ export const CreatePlaylist = (props) => {
     let result = await sendForm('playlists/create', data);
     console.log(result);
     store.dispatch(actionUsersPlaylists(store.getState().auth?.user?.id));
-    //history.push(`/playlist/${result.playlist.id}`)
+    history.push(`/playlist/${result.playlist.id}`)
   }
   const PreViewImage = (image) => {
     if (image && typeof (image) !== "string") {

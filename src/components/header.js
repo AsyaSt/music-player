@@ -27,6 +27,7 @@ export const Header = ({children}) =>
                 <Nav className="me-auto">
                     <Link to={'/user'} className="nav-link">Home</Link>
                     <Link to={'/allplaylists'} className="nav-link">Playlists</Link>
+                    <Link to={'/search'} className="nav-link">Search</Link>
                     {/*<Nav.Link href="/allplaylists">Albums</Nav.Link>*/}
                     {/*<Nav.Link href="/allplaylists">Artists</Nav.Link>*/}
                 </Nav>

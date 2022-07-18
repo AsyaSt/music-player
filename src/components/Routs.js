@@ -3,15 +3,16 @@ import { history } from '../App';
 import {LoginForm} from './authorization';
 import {CRegisterForm} from './authRegistration';
 import { store } from '../store/store';
-import { Aside } from '../App';
+import { ToastNotify } from './Toast';
 import { CUserPage } from '../pages/userPage';
-// import { UserPage} from './userPage';
 import {CPlaylistById}  from './playlistById';
 import {СNowPlayingPlayer} from './playing'
 import { CEditProfile } from './EditProfile';
 import { Header } from './header';
 import { CArtistPage } from '../pages/artistPage';
 import { CAlbumPage } from '../pages/albumPage';
+import { CSearchPage } from '../pages/searchPage';
+import { AllPlaylistsPage } from '../pages/allPlaylistsPage';
 
 export const Main = ({auth}) =>
 
@@ -28,14 +29,16 @@ export const Main = ({auth}) =>
           {!auth && <Redirect from='/playlist' to={'/login'} exact />}
           {!auth && <Redirect from='/artists' to={'/login'} exact />}
           {!auth && <Redirect from='/albums' to={'/login'} exact />}
+          {!auth && <Redirect from='/search' to={'/login'} exact />}
           <Route path={'/login'} component={LoginForm} />
           <Route path={'/register'} component={CRegisterForm}/>
           <Route path={'/editprofile'} component={CEditProfile}/>
-          <Route path={'/allplaylists'} component={Aside}/>
+          <Route path={'/allplaylists'} component={AllPlaylistsPage}/>
           <Route path={'/playlist'} component={CPlaylistById} />
           <Route path={'/user'} component={CUserPage} />
           <Route path={'/artists'} component={CArtistPage} />
           <Route path={'/albums'} component={CAlbumPage} />
+          <Route path={'/search'} component={CSearchPage} />
           <Route exact path="/">{auth ? <Redirect to="/user"/> : <Redirect to="/login" /> }</Route>
         </Switch>
       </div>
@@ -47,11 +50,11 @@ const Content = ({children}) =>
   <>
   {store.getState().auth?.token && <Header/>}
     <section className='d-flex justify-content-center container-fluid pt-3'>
+      <ToastNotify/>
       <div className={store.getState().auth?.token ? 'col-7 pe-3' : 'col-12 pe-3'}>
         {children}
       </div>
-      {/* <div className='col-5'> */}
-        {store.getState().auth?.token && <СNowPlayingPlayer className='col-5'/>}
-      {/* </div> */}
+
+      {store.getState().auth?.token && <СNowPlayingPlayer className='col-5'/>}
     </section>
   </>

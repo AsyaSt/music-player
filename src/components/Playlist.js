@@ -8,8 +8,9 @@ import { store } from '../store/store';
 import { actionAllPlaylists } from '../store/promiseReducer';
 
 
-export const PlaylistsAll = ({playlists}) => 
-{
+export const PlaylistsAll = ({playlists}) => {
+let text = window.location.href.split('/')[3];
+console.log(text + 'text')
 const getAnswer =  () => {
   store.dispatch(actionAllPlaylists());
 };
@@ -19,9 +20,9 @@ useEffect(() => {
 }, []);
 
 return (<>
-  <div className="d-flex justify-content-between align-items-center py-3">
-    <h3 className="text-uppercase"> <FontAwesomeIcon icon={faCompactDisc} className="me-2"/>Playlists</h3>
-  </div>
+  {/* <div className="d-flex justify-content-between align-items-center py-3">
+    <h3 className="text-uppercase"> <FontAwesomeIcon icon={faCompactDisc} className="me-2"/>{(text === 'allplaylists') ? 'Playlists' : "Albums"}</h3>
+  </div> */}
 <div className='RootCategories d-flex justify-content-start flex-wrap'>
   {playlists.map((playlist, i) => <Playlist key={i} playlist={playlist}/>)}
 </div>
@@ -29,4 +30,4 @@ return (<>
 }
 
 
-export const CAllPlaylists = connect(state => ({playlists: state.promise.allPlaylists?.payload?.playlists?.data || []}), )(PlaylistsAll);
+// export const CAllPlaylists = connect(state => ({playlists: state.promise.allPlaylists?.payload?.playlists?.data || []}), )(PlaylistsAll);

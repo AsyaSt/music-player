@@ -80,3 +80,7 @@ export const actionPlaylistById = (_id) => {
 
 export const actionArtistById = (_id) => 
 actionPromise('artistById', gql('/artists/'+_id))
+
+
+export const actionSearch = (search) => 
+actionPromise('searchResult', gql('/search?search='+search))

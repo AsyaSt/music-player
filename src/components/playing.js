@@ -30,7 +30,7 @@ export let NowPlayingPlayer = (props) => {
         if (props.currentTime) audio.currentTime = newCurrent
     }, [newCurrent]);
     
-    let album_photo = props.track?.album?.photo
+    let album_photo = props.track?.album?.photo || img_album;
     const [key, setKey] = useState('home');
     return(
         <div className="player col-xxl-3 col-lg-5 ps-3">
@@ -46,7 +46,6 @@ export let NowPlayingPlayer = (props) => {
                             <div className="details w-100">
                                 <div className="now-playing"></div>
                                 <div className="track-art" style={{backgroundImage:`url(${album_photo})`}} ></div>
-                                {/*<div className="track-name">{props.track?.name|| 'Track Name'  }</div>*/}
                                 <div className="track-name w-100 text-center">
                                     <div className='line w-75'>
                                         <div className='second w-100'>

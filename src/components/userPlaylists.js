@@ -12,7 +12,7 @@ import Button from "react-bootstrap/Button";
 
 
 export const Playlist = ({playlist}) => {
-  let link = ((window.location.href.split('/')[3]) === 'artists' ? 'albums' : 'playlist');
+  let link = (((window.location.href.split('/')[3]) === 'artists' || (window.location.href.split('/')[3]) === 'search') ? 'albums' : 'playlist');
   return(
   <div className="">
       <div className="me-4 mb-4 p-4 playlist-img-box rounded-5 position-relative"
