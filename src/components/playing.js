@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {faVolumeDown, faVolumeUp, faRandom, faStepBackward, faStopCircle, faStepForward, faPlayCircle, faRepeat} from '@fortawesome/free-solid-svg-icons'
 import { store } from '../store/store';
 import {actionPlayerRandom, actionFullPlay, actionFullPause, actionFullSetVolume, actionPrevTrack, actionNextTrack, actionSetRepeat, actionSetRandom} from '../store/playerReducer';
-import {Provider, connect}   from 'react-redux';
+import {connect}   from 'react-redux';
 import { audio } from './Tracks';
 import img_album from '../images/default_album.gif';
 import {Nav, Tab, Tabs} from "react-bootstrap";
@@ -30,16 +30,16 @@ export let NowPlayingPlayer = (props) => {
         if (props.currentTime) audio.currentTime = newCurrent
     }, [newCurrent]);
     
-    let album_photo = (props.track?.album?.photo) ? `http://player-api/storage/albums/${props.track?.album?.photo}` : img_album 
+    let album_photo = props.track?.album?.photo
     const [key, setKey] = useState('home');
     return(
-        <div className="player col-xxl-3 col-lg-5 ">
+        <div className="player col-xxl-3 col-lg-5 ps-3">
             <div className="wrapper ">
                 <Tabs
                     id="fill-tab-example"
                     activeKey={key}
                     onSelect={(k) => setKey(k)}
-                    fill
+                    fill className="mb-3"
                 >
                     <Tab className="text-white bg-dark" tabClassName="text-white bg-dark" eventKey="home" title="Player">
                         <div className="flex-column justify-content-center align-items-center d-flex">
@@ -59,7 +59,7 @@ export let NowPlayingPlayer = (props) => {
                                 <div className="now-playing">{props.track?.id3?.artist || 'Artist'  }</div>
                             </div>
         
-                            <div className="slider-container duration w-100">
+                            <div className="slider-container duration w-100 mb-3">
         
                                 <div className="d-flex align-items-end justify-content-between">
                                     <div className="slider-container d-flex flex-column w-75 pe-2" >
@@ -92,7 +92,7 @@ export let NowPlayingPlayer = (props) => {
         
                             <div className="buttons">
                                 <div className="random-track">
-                                    <FontAwesomeIcon icon={faRandom} className={props.random === 1 ? 'fa-2x text-white-50 cursor-pointer' : 'fa-2x text-primary cursor-pointer'}
+                                    <FontAwesomeIcon icon={faRandom} className={props.random === 1 ? 'fa-1x text-white-50 cursor-pointer' : 'fa-1x text-primary cursor-pointer'}
                                          onClick={() => {
                                              props.random === 1 ? store.dispatch(actionSetRandom(2)) : store.dispatch(actionSetRandom(1))
                                              store.dispatch(actionPlayerRandom());
@@ -104,7 +104,7 @@ export let NowPlayingPlayer = (props) => {
         
                                 </div>
                                 <div className="play-track">
-                                    <FontAwesomeIcon icon={(!props.isPlaying) ? faPlayCircle : faStopCircle} className='fa-5x cursor-pointer'
+                                    <FontAwesomeIcon icon={(!props.isPlaying) ? faPlayCircle : faStopCircle} className='fa-4x cursor-pointer'
                                          onClick={() => {
                                              if(store.getState()?.player?.isPlaying === true) {
                                                  store.dispatch(actionFullPause());
@@ -119,7 +119,7 @@ export let NowPlayingPlayer = (props) => {
                                     }}/>
                                 </div>
                                 <div className="random-track">
-                                    <FontAwesomeIcon icon={faRepeat} className={props.repeat === 1 ? 'fa-2x text-white-50 cursor-pointer' : 'fa-2x text-primary cursor-pointer'}
+                                    <FontAwesomeIcon icon={faRepeat} className={props.repeat === 1 ? 'fa-1x text-white-50 cursor-pointer' : 'fa-1x text-primary cursor-pointer'}
                                                      onClick={() => (props.repeat === 1 ? store.dispatch(actionSetRepeat(2)) : store.dispatch(actionSetRepeat(1)))}/>
                                 </div>
         

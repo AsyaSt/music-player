@@ -125,11 +125,13 @@ export const PlaylistById = ({playlist, tracks}) => {
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </div>
+                                    {playlist.user_id !== store.getState().auth.user.id ?
                                     <div className="col">
                                         <button type="button" className="btn btn-outline-danger">
                                             <FontAwesomeIcon icon={faHeart}/> 
                                         </button>
                                     </div>
+                                        : <></>}
                                 </div>
                             </div>
                         </div>

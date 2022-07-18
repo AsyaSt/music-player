@@ -11,7 +11,7 @@ import { actionAllPlaylists, actionUsersPlaylists } from './store/promiseReducer
 import { Header } from './components/header';
 import { Main } from './components/Routs';
 import {CAllPlaylists} from './components/Playlist';
-import {СNowPlayingPlayer} from './components/playing';
+
 
 
 

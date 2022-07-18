@@ -62,8 +62,10 @@ export const actionUsersPlaylists = (id) =>
     actionPromise('usersPlaylists', gql('/profile/' + id + '/playlists'))
 
 
-export const actionPlaylistById = (_id) => 
-  actionPromise('plstById', gql('/playlists/'+_id))
+export const actionPlaylistById = (_id) => {
+    let link = (((window.location.href.split('/')[3] === 'artists' || window.location.href.split('/')[3]) === 'albums') ? 'albums' : 'playlists');
+    return (actionPromise('plstById', gql('/'+link+'/'+_id)))
+}
 
   export const actionNowPlaylist = (_id) => 
   actionPromise('plstnow', gql('/playlists/'+_id))
@@ -77,4 +79,4 @@ export const actionPlaylistById = (_id) =>
 };
 
 export const actionArtistById = (_id) => 
-actionPromise('artistById', gql('/artist/'+_id))
+actionPromise('artistById', gql('/artists/'+_id))

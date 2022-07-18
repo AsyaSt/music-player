@@ -1,3 +1,5 @@
+//import { store } from "./store";
+import { store } from '../store/store';
 
 export const authReducer = function(state, {type, token, user}) {
     if (state === undefined) {

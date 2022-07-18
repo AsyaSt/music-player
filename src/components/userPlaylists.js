@@ -11,14 +11,16 @@ import Button from "react-bootstrap/Button";
 
 
 
-export const Playlist = ({playlist}) => 
+export const Playlist = ({playlist}) => {
+  let link = ((window.location.href.split('/')[3]) === 'artists' ? 'albums' : 'playlist');
+  return(
   <div className="">
       <div className="me-4 mb-4 p-4 playlist-img-box rounded-5 position-relative"
-           style={{backgroundImage: `url(${playlist.photo || image})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center", width:250, height:250}}
+           style={{backgroundImage: `url(${playlist.photo})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center", width:250, height:250}}
       >
           <div className="playlist-grey-box"></div>
-          <Link className="d-flex justify-content-between flex-wrap border-0 link-light position-relative text-decoration-none h4 text-wrap"
-                to={`/playlist/${playlist.id}`} onClick={() => {
+          <Link className="d-flex justify-content-between flex-wrap border-0 link-light position-relative text-decoration-none h6 text-wrap"
+                to={`/${link}/${playlist.id}`} onClick={() => {
                   store.dispatch(actionPlaylistById(playlist.id));
                 }}>
               <span className="playlist-title w-75">{playlist.name}</span>
@@ -44,7 +46,8 @@ export const Playlist = ({playlist}) =>
               />
           </Button>
       </div>
-  </div>
+  </div>)
+}
   
   export const UsersPlaylistsAll = ({playlists}) => {
     const [modalShow, setModalShow] = React.useState(false);

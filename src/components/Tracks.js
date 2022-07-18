@@ -14,16 +14,13 @@ import { Dropdown , Form} from 'react-bootstrap';
 
 export let audio = new Audio();
 
-//!  --------
-// // const playlists = store.getState().promise?.usersPlaylists?.payload?.playlists;
-
-// const playlistOption = (playlists = null) => {
-//     // if (playlists) {
-//         // console.log(playlists)
-//         return <option value={"1"}>Add to...</option>
-//     // }
-// }
-//! ------
+const PlaylistOption = () => {
+    const playlists = store.getState().promise?.usersPlaylists?.payload?.playlists;
+     if (playlists) {
+        console.log(playlists);
+        return (playlists.map((playlistone, i) => <option value={playlistone.id} className="bg-dark" key={i}>{playlistone.name}</option>))
+     }
+}
 
 const ButtonDeleteTrack = (track) => {
     const [deletePllstModal, setDeletePllstModal] = useState(false);
@@ -59,7 +56,15 @@ const ButtonDeleteTrack = (track) => {
 }
 
 
-const Track = ({track,  playlist}) => 
+const Track = ({track,  playlist}) => {
+    // const [select, setSelect] = React.useState('');
+    const PostLoadTracks = async(form)  =>{
+        console.log(form.target)
+        const data = new FormData(form.target);
+        sendForm('playlists/add-track', data);
+
+      }  
+return(
 <tr>
 <td scope="row" width={30} data-id={track.id}>
     <div className="col">
@@ -77,10 +82,10 @@ const Track = ({track,  playlist}) =>
         <Link className="link-light" to='#'>  {track.name}</Link>
     </td>
     <td onClick={() => store.dispatch(actionArtistById(track.artist_id))}>
-        <Link className="link-light" to={`/artist/${track.artist_id}`}>  {track.id3.artist}</Link>
+        <Link className="link-light" to={`/artists/${track.artist_id}`}>  {track.id3.artist}</Link>
     </td>
     <td> 
-        <Link className="link-light" to='#'> {track.id3.getAlbum}</Link>
+        <Link className="link-light" to={`/albums/${track?.album?.id}`}> {track.id3.getAlbum}</Link>
     </td>
     <td align={"right"}>
         <Dropdown align={"end"}>
@@ -89,10 +94,14 @@ const Track = ({track,  playlist}) =>
             <Dropdown.Menu variant={"dark"}>
             {playlist?.user_id === store.getState().auth.user.id ? <ButtonDeleteTrack track={track} /> :
 
-            <Form className="input-group d-flex">
-                <select className="dropdown-item w-auto" id="inputGroupSelect04"
+            <Form className="input-group d-flex" onSubmit={(e) => {
+                e.preventDefault();
+                PostLoadTracks(e);
+            }}>
+                <input type={"hidden"} name="trackId" value={track?.id}></input>
+                <select className="dropdown-item btn btn-outline-secondary w-75" name="playlistId" id="inputGroupSelect04"
                         aria-label="Example select with button addon">
-                    {/* {playlistOption()} */}
+                    <PlaylistOption/>
                 </select>
                 <button type={"submit"} className="btn btn-outline-secondary w-auto"><FontAwesomeIcon icon={faCheck}/></button>
             </Form>
@@ -104,7 +113,8 @@ const Track = ({track,  playlist}) =>
             </Dropdown.Menu>
         </Dropdown>
     </td>
-</tr>
+</tr>)
+}
 
 
 export const TracksAll = ({tracks, playlist}) => 

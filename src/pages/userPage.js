@@ -8,9 +8,18 @@ import {
     faCompactDisc,
     faHeadphonesSimple} from "@fortawesome/free-solid-svg-icons";
 import {UsersPlaylistsAll} from '../components/userPlaylists';
+import { actionUsersPlaylists } from "../store/promiseReducer";
+import { useEffect } from "react";
 
 
-export const UserPage = ({user}) => {
+export const UserPage = ({user, playlists}) => {
+    const getAnswer =  () => {
+        store.dispatch(actionUsersPlaylists(store.getState().auth?.user?.id));
+    };
+
+    useEffect(() => {
+      getAnswer();
+    }, []);
         return(<>
         <div className='d-flex  w-100'>
                 <div className='me-4 playlist-img-box rounded-5' style={{backgroundImage: `url(${user?.avatar || image})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
@@ -25,15 +34,16 @@ export const UserPage = ({user}) => {
                                 <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faHeadphonesSimple} /> 100 Tracks</p>
                                 <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faCompactDisc} /> 8 PLaylists</p>
                                 <p className='text-white-50 mb-2'><FontAwesomeIcon className='me-2' icon={faAlignCenter} />
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid amet animi aspernatur facere iste nisi omnis optio, vel vitae? Accusantium assumenda autem cumque ducimus eum ipsa, maiores pariatur repudiandae?
+                                    {store.getState().auth?.user?.description !== 'null' ? store.getState().auth?.user?.description : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid amet animi aspernatur facere iste nisi omnis optio, vel vitae? Accusantium assumenda autem cumque ducimus eum ipsa, maiores pariatur repudiandae?" }
                                 </p>
                         </div>
                     </div>
                 </div>
             </div>
-        <СUsersPlaylists/>
+        <UsersPlaylistsAll playlists={playlists}/>
         </>)
     }
     
-export const CUserPage = connect(state => ({user: state.auth?.user || {}} ) )(UserPage);
-export const СUsersPlaylists = connect(state => ({playlists: state.promise?.usersPlaylists?.payload?.playlists|| []}))(UsersPlaylistsAll);
+export const CUserPage = connect(state => ({user: state.auth?.user || {},
+    playlists: state.promise?.usersPlaylists?.payload?.playlists|| []} ) )(UserPage);
+//export const СUsersPlaylists = connect(state => ({playlists: state.promise?.usersPlaylists?.payload?.playlists|| []}))(UsersPlaylistsAll);
