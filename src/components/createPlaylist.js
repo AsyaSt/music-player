@@ -6,6 +6,7 @@ import { actionUsersPlaylists } from '../store/promiseReducer';
 import { store } from '../store/store';
 import { history } from '../App';
 import {Form} from "react-bootstrap";
+import { RunToast } from './Toast';
 
 
 export const CreatePlaylist = (props) => {
@@ -26,6 +27,7 @@ export const CreatePlaylist = (props) => {
     console.log(result);
     store.dispatch(actionUsersPlaylists(store.getState().auth?.user?.id));
     history.push(`/playlist/${result.playlist.id}`)
+    RunToast('bg-success','Success', 'Playlist created')
   }
   const PreViewImage = (image) => {
     if (image && typeof (image) !== "string") {

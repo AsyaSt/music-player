@@ -5,12 +5,13 @@ import { actionPlaylistById } from '../store/promiseReducer';
 import { store } from '../store/store';
 import { sendForm } from './SendForm';
 import {Form} from "react-bootstrap";
+import { RunToast } from './Toast';
 
 
 export function EditPlaylistModal  (props)  {
     const [name, setName] = useState(props.playlist?.name);
     const [description, setDescription] = useState(props.playlist?.description);
-    //const [privat, setPrivat] = useState(0);
+    const [privat, setPrivat] = useState(props.playlist?.private);
     const [image, setImage] = useState(props.playlist?.photo);
 
     const PostEditPlaylist = async(event)  =>{
@@ -19,11 +20,12 @@ export function EditPlaylistModal  (props)  {
 
         data.append("name", name || props.playlist?.name);
         (description !== props.playlist?.description) && data.append("description", description);
-        data.append("private", props.playlist?.private);
+        data.append("private", privat);
         image.name && data.append("photo",  image, image.name);
 
         sendForm('playlists/' + props.playlist?.id + '/edit', data);  
         setTimeout(() => store.dispatch(actionPlaylistById(props.playlist?.id)), 100) ;
+        RunToast('bg-success','Success', 'Playlist updated')
     } 
     const PreViewImage = (image) => {
         if (image && typeof (image) !== "string") {
@@ -59,6 +61,14 @@ export function EditPlaylistModal  (props)  {
                     <Form.Label>Description</Form.Label>
                     <Form.Control as="textarea" name="description" rows={3}  id="description" className='form-control mb-3' value={description || ''} onChange={e => setDescription(e.target.value)} />
                 </Form.Group>
+
+                <Form.Check
+                  type="switch"
+                  id="flexCheckIndeterminate"
+                  label="Private?"
+                  checked={privat}
+                  onChange={e => setPrivat(e.target.checked? 1 : 0)}
+              />
             </Form>
         </Modal.Body>
         <Modal.Footer> 

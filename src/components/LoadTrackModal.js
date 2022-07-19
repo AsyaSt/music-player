@@ -1,12 +1,12 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {connect}   from 'react-redux';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { store } from '../store/store';
 import { sendForm } from './SendForm';
 import { actionPlaylistById} from '../store/promiseReducer';
-import { actionFullSetPlaylist, actionFullSetTrack, actionFullSetTrackCount} from '../store/playerReducer';
+import { actionFullSetPlaylist} from '../store/playerReducer';
 import {Form} from "react-bootstrap";
+import { RunToast } from './Toast';
 
 export function LoadTrackModal  (props)  {
     const [tracks, setTrack] = useState(null);
@@ -27,6 +27,8 @@ export function LoadTrackModal  (props)  {
                 setTimeout(() => store.dispatch(actionFullSetPlaylist(store.getState().promise.plstById?.payload?.tracks)), 1000);
             }
             , 1000);
+            
+        RunToast('bg-success','Success', 'Tracks loaded')
       }  
 
       let TracksTableItem = ({name}) =>

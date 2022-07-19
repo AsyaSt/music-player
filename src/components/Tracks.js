@@ -1,6 +1,6 @@
 import {connect}   from 'react-redux';
 import {actionFullSetTrack, actionFullPlay, actionFullSetPlaylist , actionAddTrackToQueue} from '../store/playerReducer';
-import { actionNowPlaylist, actionPlaylistById, actionArtistById} from '../store/promiseReducer';
+import {actionPlaylistById, actionArtistById} from '../store/promiseReducer';
 import { store } from '../store/store';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -57,13 +57,14 @@ const ButtonDeleteTrack = (track) => {
 
 
 const Track = ({track,  playlist}) => {
-    // const [select, setSelect] = React.useState('');
     const PostLoadTracks = async(form)  =>{
         console.log(form.target)
         const data = new FormData(form.target);
         sendForm('playlists/add-track', data);
 
-      }  
+      }
+
+    
 return(
 <tr>
 <td scope="row" width={30} data-id={track.id}>
@@ -74,7 +75,7 @@ return(
             playlist.tracks ? store.dispatch(actionFullSetTrack(playlist?.tracks[playlist?.tracks.indexOf(track)])) : store.dispatch(actionFullSetTrack(track))
             store.dispatch(actionFullPlay());
         }}>
-            <FontAwesomeIcon className='' icon={faPlay}/>
+            <FontAwesomeIcon className={`track-play-icon${track?.id}`} icon={faPlay}/>
         </Button>
     </div>
 </td>
@@ -117,7 +118,7 @@ return(
 }
 
 
-export const TracksAll = ({tracks, playlist}) => 
+export const TracksAll = ({tracks, playlist, playingTrack}) => 
 <table className="table table-dark table-hover align-middle">
     <thead>
         <tr>
