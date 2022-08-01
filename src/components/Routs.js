@@ -1,7 +1,7 @@
 import {Router, Route, Redirect, Switch} from 'react-router-dom';
 import { history } from '../App';
-import {LoginForm} from '../pages/authorization';
-import {CRegisterForm} from './authRegistration';
+import {LoginForm} from '../pages/loginPage';
+import {CRegisterForm} from '../pages/registrationPage';
 import { store } from '../store/store';
 import { ToastNotify } from './Toast';
 import { CUserPage } from '../pages/userPage';
