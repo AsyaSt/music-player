@@ -88,7 +88,14 @@ const actionSetVolume = (volume) => ({type:'SET_VOLUME', volume})
 const actionSetTrack = (track) => ({type:'SET_TRACK', track})
     export const actionFullSetTrack = (track) =>
         dispatch => {
-            console.log(track)
+            // let activeTrack = document.querySelector('.active-track')
+            // if(activeTrack) {
+            //     activeTrack.classList.add('disactive-track');
+            //     activeTrack.classList.remove('active-track');
+            // }
+            // document.querySelector(`.track-play-button-${track?.id}`).classList.remove('disactive-track')
+            // document.querySelector(`.track-play-button-${track?.id}`).classList.add('active-track')
+            // console.log(track)
             audio.src = `http://player-api/storage/tracks/${track?.file}`;
             dispatch(actionSetTrack(track));
             dispatch(actionFullPlay());

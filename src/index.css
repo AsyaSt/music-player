@@ -277,3 +277,14 @@ i.fa-step-backward{
   max-width: 100px;
   max-height: 100px;
 }
+.active-track {
+  background-color: rgba(255, 255, 255, 0.152)!important;
+  --bs-table-accent-bg: var(--bs-table-hover-bg);
+  color: var(--bs-table-hover-color);
+}
+.disactive-track {
+  background-color: inherit!important;
+}
+.disactive-track-icon {
+  display: none;
+}

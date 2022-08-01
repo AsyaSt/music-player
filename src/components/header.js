@@ -46,7 +46,7 @@ export const Header = ({children}) =>
                         </NavDropdown.Item>
                     </NavDropdown>
                     <Link to={"/user"}>
-                        <Image className="nav-avatar rounded-circle" src={store.getState().auth.user?.avatar}></Image>
+                        <Image className="nav-avatar rounded-circle" src={store.getState().auth.user?.avatar || image}></Image>
                     </Link>
                 </Nav>
             </Navbar.Collapse>

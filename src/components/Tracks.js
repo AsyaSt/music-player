@@ -7,9 +7,10 @@ import Modal from 'react-bootstrap/Modal';
 import { sendForm } from './SendForm';
 import React, {useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faPlay} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faPause, faPlay} from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
 import { Dropdown , Form} from 'react-bootstrap';
+import { RunToast } from './Toast';
 
 
 export let audio = new Audio();
@@ -56,26 +57,26 @@ const ButtonDeleteTrack = (track) => {
 }
 
 
-const Track = ({track,  playlist}) => {
+const Track = ({track,  playlist, isPlaying}) => {
     const PostLoadTracks = async(form)  =>{
         console.log(form.target)
         const data = new FormData(form.target);
         sendForm('playlists/add-track', data);
-
+        RunToast('bg-success','Success', `Track add to playlist`)
       }
 
     
 return(
-<tr>
+<tr className={`disactive-track track-play-button-${track?.id}`}>
 <td scope="row" width={30} data-id={track.id}>
     <div className="col">
-        <Button variant="outline-light" className='rounded-5'  title='Play' onClick={async () => {
-            console.log(playlist.tracks, playlist?.tracks[playlist?.tracks.indexOf(track)]);
+        <Button variant="outline-light" className={`rounded-5`}  title='Play' onClick={async () => {
+            // console.log(playlist.tracks, playlist?.tracks[playlist?.tracks.indexOf(track)]);
             playlist.tracks && store.dispatch(actionFullSetPlaylist(playlist?.tracks));
             playlist.tracks ? store.dispatch(actionFullSetTrack(playlist?.tracks[playlist?.tracks.indexOf(track)])) : store.dispatch(actionFullSetTrack(track))
             store.dispatch(actionFullPlay());
         }}>
-            <FontAwesomeIcon className={`track-play-icon${track?.id}`} icon={faPlay}/>
+            <FontAwesomeIcon className={`track-play-icon-${track?.id}`} icon={faPlay}/>
         </Button>
     </div>
 </td>
@@ -98,6 +99,7 @@ return(
             <Form className="input-group d-flex" onSubmit={(e) => {
                 e.preventDefault();
                 PostLoadTracks(e);
+                
             }}>
                 <input type={"hidden"} name="trackId" value={track?.id}></input>
                 <select className="dropdown-item btn btn-outline-secondary w-75" name="playlistId" id="inputGroupSelect04"
@@ -118,7 +120,7 @@ return(
 }
 
 
-export const TracksAll = ({tracks, playlist, playingTrack}) => 
+export const TracksAll = ({tracks, playlist, isPlaying}) => 
 <table className="table table-dark table-hover align-middle">
     <thead>
         <tr>
@@ -130,9 +132,10 @@ export const TracksAll = ({tracks, playlist, playingTrack}) =>
         </tr>
 </thead>
     <tbody>
-        {tracks.map((tracks, i) => <Track key={i} track={tracks} playlist={playlist}/>)}
+        {tracks.map((tracks, i) => <Track key={i} track={tracks} playlist={playlist} isPlaying={isPlaying}/>)}
     </tbody>
 </table>
 
 export const СAllTracks = connect(state => ({playlist: state.promise.plstById?.payload || {},
-                                 tracks: state.promise?.plstById?.payload?.tracks || []} ), )(TracksAll);
+                                 tracks: state.promise?.plstById?.payload?.tracks || [],
+                                 isPlaying: state.player?.isPlaying || false,} ), )(TracksAll);

@@ -1,6 +1,6 @@
 import {Router, Route, Redirect, Switch} from 'react-router-dom';
 import { history } from '../App';
-import {LoginForm} from './authorization';
+import {LoginForm} from '../pages/authorization';
 import {CRegisterForm} from './authRegistration';
 import { store } from '../store/store';
 import { ToastNotify } from './Toast';
@@ -26,10 +26,10 @@ export const Main = ({auth}) =>
           {!auth && <Redirect from='/user' to={'/login'} exact />} 
           {!auth && <Redirect from='/editprofile' to={'/login'} exact />}
           {!auth && <Redirect from='/allplaylists' to={'/login'} exact />}
-          {!auth && <Redirect from='/playlist' to={'/login'} exact />}
-          {!auth && <Redirect from='/artists' to={'/login'} exact />}
-          {!auth && <Redirect from='/albums' to={'/login'} exact />}
-          {!auth && <Redirect from='/search' to={'/login'} exact />}
+          {!auth && <Redirect from='/playlist' to={'/login'} />}
+          {!auth && <Redirect from='/artists' to={'/login'} />}
+          {!auth && <Redirect from='/albums' to={'/login'}/>}
+          {!auth && <Redirect from='/search' to={'/login'} />}
           <Route path={'/login'} component={LoginForm} />
           <Route path={'/register'} component={CRegisterForm}/>
           <Route path={'/editprofile'} component={CEditProfile}/>

@@ -25,7 +25,7 @@ export function EditPlaylistModal  (props)  {
 
         sendForm('playlists/' + props.playlist?.id + '/edit', data);  
         setTimeout(() => store.dispatch(actionPlaylistById(props.playlist?.id)), 100) ;
-        RunToast('bg-success','Success', 'Playlist updated')
+        RunToast('bg-success','Success', 'Playlist updated');
     } 
     const PreViewImage = (image) => {
         if (image && typeof (image) !== "string") {
