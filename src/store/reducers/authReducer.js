@@ -1,5 +1,3 @@
-import { store } from '../store/store';
-
 export const authReducer = function(state, {type, token, user}) {
     if (state === undefined) {
         if(localStorage.authToken) {
@@ -29,8 +27,7 @@ export const authReducer = function(state, {type, token, user}) {
     return state || {};
   };
   
-  export const actionAuthLogin  = (token, user) => ({type: "AUTH_LOGIN", token, user});
-  export const actionAuthLogout = () => ({type: "AUTH_LOGOUT"});
+
   
 
   

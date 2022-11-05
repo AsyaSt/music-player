@@ -1,63 +1,5 @@
-import { store } from '../store/store';
-import { audio } from '../components/Tracks';
-
-export const playerReducer = function(state = {}, {type, duration, track, playlist, currentTime, volume,  repeat=1, random=1}) {
-    if (!state) {
-        return {};
-    }
-    if (type === 'PLAY'){
-        return {
-            ...state, 
-            isPlaying: true,
-            isStopped: false
-        }
-    } if (type === "PAUSE"){
-        return {
-            ...state,
-            isStopped: true,
-            isPlaying: false
-        }
-    } if (type === 'GET_DURATION') {
-        return {
-            ...state,
-            duration
-        }
-    } if (type === 'SET_CURRENT_TIME') {
-        return {
-            ...state,
-            currentTime
-        }
-    } if (type === 'SET_VOLUME') {
-        return {
-            ...state,
-            volume
-        }
-    } if (type === 'SET_TRACK' || type === 'SET_NEW_TRACK' || type === "SET_PREV_TRACK") {
-        return {
-            ...state,
-            track,
-            isPlaying: true,
-            isStopped: false
-        }
-    } if (type === 'SET_PLAYLIST') {
-        return {
-            ...state,
-            playlist
-        }
-    } if (type === 'SET_REPEAT'){
-        return {
-            ...state,
-            repeat
-        }
-    } if (type === 'SET_RANDOM') {
-        return {
-            ...state,
-            random
-        }
-    }
-    return state;
-}
-
+import { audio } from "../../components/Tracks";
+import { store } from "../store";
 
 const actionPlay = () => ({type:'PLAY'})
     export const actionFullPlay = () =>
@@ -88,14 +30,6 @@ const actionSetVolume = (volume) => ({type:'SET_VOLUME', volume})
 const actionSetTrack = (track) => ({type:'SET_TRACK', track})
     export const actionFullSetTrack = (track) =>
         dispatch => {
-            // let activeTrack = document.querySelector('.active-track')
-            // if(activeTrack) {
-            //     activeTrack.classList.add('disactive-track');
-            //     activeTrack.classList.remove('active-track');
-            // }
-            // document.querySelector(`.track-play-button-${track?.id}`).classList.remove('disactive-track')
-            // document.querySelector(`.track-play-button-${track?.id}`).classList.add('active-track')
-            // console.log(track)
             audio.src = `http://player-api/storage/tracks/${track?.file}`;
             dispatch(actionSetTrack(track));
             dispatch(actionFullPlay());

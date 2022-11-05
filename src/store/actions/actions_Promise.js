@@ -1,16 +1,5 @@
-import { actionAuthLogin } from "./authReducer";
-import { store } from "./store";
-
-
-export function promiseReducer(state={}, {type, name, status, payload, error}) {
-    if (type === 'PROMISE'){
-        return {
-            ...state,
-            [name]:{status, payload, error}
-        }
-    }
-    return state
-}
+import { store } from "../store"
+import { actionAuthLogin } from "./actions_Auth"
 
 const actionPending   =       name      => ({type:'PROMISE',name, status: 'PENDING'})
 const actionFulfilled =  (name,payload) => ({type:'PROMISE',name, status: 'FULFILLED', payload})
@@ -31,7 +20,7 @@ export const actionPromise   = (name, promise) =>
 
     export const backendURL = 'http://player-api/api';
 
-    const getGQL = (backendURL) =>
+const getGQL = (backendURL) =>
     (plusurl) => fetch(backendURL+plusurl, {
         method: 'GET',
         headers: {
@@ -40,17 +29,9 @@ export const actionPromise   = (name, promise) =>
         }
     }).then(res => res.json())
         .then(data => {
-            return data;
-            // if (data.data){
-            //     return Object.values(data.data)[0] 
-            // } 
-            // else {throw new Error(JSON.stringify(data.errors))}
-            
+            return data;            
         })
   
-
- 
-
 
 export const gql = getGQL(backendURL);
 

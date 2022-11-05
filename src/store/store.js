@@ -1,8 +1,8 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
-import { authReducer } from './authReducer';
-import { promiseReducer } from './promiseReducer';
-import { playerReducer } from './playerReducer';
+import { authReducer } from './reducers/authReducer';
+import { playerReducer } from './reducers/playerReducer';
+import { promiseReducer } from './reducers/promiseReducer';
 
 
 
