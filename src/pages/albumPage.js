@@ -1,8 +1,4 @@
 import { connect } from "react-redux"
-import { store } from "../store/store";
-import { useEffect } from "react";
-import { TracksAll } from "../components/Tracks";
-import { actionPlaylistById } from "../store/promiseReducer";
 import { PlaylistById } from "../components/playlistById";
 
 export const AlbumPage = ({playlist, tracks}) => {

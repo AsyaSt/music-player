@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
-import { actionAuthLogin } from '../store/authReducer';
 import { store } from '../store/store';
 import {history} from '../App';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEyeSlash, faEye} from "@fortawesome/free-solid-svg-icons";
 import { Button, InputGroup } from 'react-bootstrap';
+import { actionAuthLogin } from '../store/actions/actions_Auth';
 
 
 

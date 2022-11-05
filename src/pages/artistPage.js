@@ -3,9 +3,9 @@ import { store } from "../store/store";
 import { useEffect } from "react";
 import { PlaylistsAll } from "../components/Playlist";
 import { TracksAll } from "../components/Tracks";
-import { actionArtistById } from "../store/promiseReducer";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCompactDisc, faHeadphonesSimple} from "@fortawesome/free-solid-svg-icons";
+import { actionArtistById } from "../store/actions/actions_Promise";
 
 const ArtistPage = ({artist}) => {
     let id = window.location.href.split('/')[4];

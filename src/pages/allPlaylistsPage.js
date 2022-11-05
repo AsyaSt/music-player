@@ -16,6 +16,4 @@ export const AllPlaylistsPage = () => {
 }
 
 
-
-
 export const CAllPlaylists = connect(state => ({playlists: state.promise.allPlaylists?.payload?.playlists?.data || []}), )(PlaylistsAll);

@@ -8,8 +8,8 @@ import {
     faCompactDisc,
     faHeadphonesSimple} from "@fortawesome/free-solid-svg-icons";
 import {UsersPlaylistsAll} from '../components/userPlaylists';
-import { actionUsersPlaylists } from "../store/promiseReducer";
 import { useEffect } from "react";
+import { actionUsersPlaylists } from "../store/actions/actions_Promise";
 
 
 export const UserPage = ({user, playlists}) => {

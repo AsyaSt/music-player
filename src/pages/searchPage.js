@@ -1,13 +1,13 @@
 import { faCompactDisc, faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from "react"
+import { useEffect} from "react"
 import { Button, Form, InputGroup } from "react-bootstrap"
-import { actionSearch } from "../store/promiseReducer"
 import { store } from "../store/store"
 import { PlaylistsAll } from "../components/Playlist";
 import { TracksAll } from "../components/Tracks";
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
+import { actionSearch } from "../store/actions/actions_Promise"
 
 
 
