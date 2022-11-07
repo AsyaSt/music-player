@@ -4,27 +4,24 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faTrash, faPen, faUserAstronaut, faCompactDisc,
-    faPlus, faAlignCenter, faPlay, faHeart} from '@fortawesome/free-solid-svg-icons';
-import { actionFullSetPlaylist, actionFullSetTrack, actionAddPlaylistToQueue} from '../store/playerReducer';
+        faPlus, faAlignCenter, faPlay, faHeart} from '@fortawesome/free-solid-svg-icons';
 import {connect}   from 'react-redux';
-import { TracksAll } from './Tracks';
+import { TracksAll } from './TracksAll';
 import { LoadTrackModal } from './LoadTrackModal';
 import { EditPlaylistModal } from './EditPlaylistModal';
 import { Link } from 'react-router-dom';
-import { sendForm } from './SendForm';
+import { sendForm } from '../utils/SendForm';
 import { history } from '../App';
 import {ButtonGroup, Dropdown} from "react-bootstrap";
-import { actionPlaylistById, actionUsersPlaylists } from '../store/promiseReducer';
+import { actionPlaylistById, actionUsersPlaylists } from '../store/actions/actions_Promise';
+import { actionAddPlaylistToQueue, actionFullSetPlaylist, actionFullSetTrack } from '../store/actions/actions_Player';
 
 
 export const PlaylistById = ({playlist, tracks}) => {
     let id = window.location.href.split('/')[4];
-    const getAnswer =  () => {
-      store.dispatch(actionPlaylistById(id));
-    };
 
     useEffect(() => {
-      getAnswer();
+        store.dispatch(actionPlaylistById(id));
     }, []);
 
     const [modalShow, setModalShow] = React.useState(false);

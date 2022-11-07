@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { PlaylistsAll } from "../components/Playlist";
+import { PlaylistsAll } from "../components/PlaylistsAll";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCompactDisc} from "@fortawesome/free-solid-svg-icons";
 
