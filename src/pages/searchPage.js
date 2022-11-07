@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect} from "react"
 import { Button, Form, InputGroup } from "react-bootstrap"
 import { store } from "../store/store"
-import { PlaylistsAll } from "../components/Playlist";
-import { TracksAll } from "../components/Tracks";
+import { PlaylistsAll } from "../components/PlaylistsAll";
+import { TracksAll } from "../components/TracksAll";
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import { actionSearch } from "../store/actions/actions_Promise"
