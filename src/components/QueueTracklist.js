@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { actionRemoveTrackFromQueue } from "../store/playerReducer";
+import { actionRemoveTrackFromQueue } from "../store/actions/actions_Player";
 import { store } from "../store/store";
-import { sendForm } from "./SendForm";
+
   
 const Track = ({track}) => 
 <>
