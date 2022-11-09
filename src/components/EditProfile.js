@@ -3,11 +3,11 @@ import {connect}   from 'react-redux';
 import React, {useState} from 'react';
 import { store } from '../store/store';
 import image from '../images/card.png';
-import { actionAuthLogin } from '../store/authReducer';
 import {Link} from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import {Accordion} from "react-bootstrap";
 import {RunToast} from "./Toast";
+import { actionAuthLogin } from '../store/actions/actions_Auth';
 
 
 export async function sendForm (url, data) {
@@ -64,8 +64,9 @@ export function EditProfile  (props)  {
         
       }
 
-    return (<>
-    <div className='d-flex  w-100'>
+    return (
+    <>
+        <div className='d-flex  w-100'>
             <div className="me-4">
                 <div className='mb-3 playlist-img-box rounded-5' style={{backgroundImage: `url(${props.user?.avatar || image})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}></div>
                 <Form.Group className="mb-3" controlId="formBasicAvatar">
@@ -81,21 +82,27 @@ export function EditProfile  (props)  {
                             <Form.Group className="mb-3" controlId="formBasicAvatar">
                                 <Form.Label>Change Login:</Form.Label>
                                 <Form.Control type="text"  className="me-1" placeholder={login}
-                                              value={login} onChange={e => setLogin(e.target.value)} />
+                                    value={login} onChange={e => setLogin(e.target.value)} 
+                                />
                             </Form.Group>
+
                             <Form.Group className="mb-3" controlId="formBasicAvatar">
                                 <Form.Label>Change Name:</Form.Label>
                                 <Form.Control type="text"  className="me-1" placeholder="Anastasiia"
-                                                                                    value={name} onChange={e => setName(e.target.value)} />
+                                    value={name} onChange={e => setName(e.target.value)} 
+                                />
                             </Form.Group>
+
                             <Form.Group className="mb-3" controlId="formBasicAvatar">
                                 <Form.Label>Change About Me:</Form.Label>
                                 <Form.Control as="textarea" rows="3"  className="me-1"
-                                                                                    value={description !== 'null' ? description : ''} onChange={e => setDescription(e.target.value)} />
+                                    value={description !== 'null' ? description : ''} onChange={e => setDescription(e.target.value)}
+                                />
                             </Form.Group>
+
                             <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <Link to={'/user'}>Back to home Page</Link>
-                                    <Button variant="outline-success" type="submit">Save</Button>
+                                <Link to={'/user'}>Back to home Page</Link>
+                                <Button variant="outline-success" type="submit">Save</Button>
                             </div>
                         </Form>
                         <Accordion className="border-0">
@@ -131,7 +138,8 @@ export function EditProfile  (props)  {
                 </div>
             </div>
         </div>
-    </>)
+    </>
+    )
 }
 export const CEditProfile = connect(state => ({ user: state.auth?.user }))(EditProfile);
 

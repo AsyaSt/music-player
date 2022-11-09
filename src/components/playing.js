@@ -2,36 +2,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, {useState, useEffect} from 'react';
 import {faVolumeDown, faVolumeUp, faRandom, faStepBackward, faStopCircle, faStepForward, faPlayCircle, faRepeat} from '@fortawesome/free-solid-svg-icons'
 import { store } from '../store/store';
-import {actionPlayerRandom, actionFullPlay, actionFullPause, actionFullSetVolume, actionPrevTrack, actionNextTrack, actionSetRepeat, actionSetRandom} from '../store/playerReducer';
 import {connect}   from 'react-redux';
-import { audio } from './Tracks';
+import { audio } from './Track';
 import img_album from '../images/default_album.gif';
-import {Nav, Tab, Tabs} from "react-bootstrap";
-import { CTrackList } from './tracklist';
+import {Tab, Tabs} from "react-bootstrap";
+import { CTrackList } from './QueueTracklist';
+import { msToTime } from '../utils/msToTimeFunс';
+import { actionFullPause, actionFullPlay, actionFullSetVolume, actionNextTrack, actionPlayerRandom, actionPrevTrack, actionSetRandom, actionSetRepeat } from '../store/actions/actions_Player';
 
-function msToTime(duration) {
-    let hours,minutes,seconds;
-    hours = Math.floor(duration / 3600);
-    minutes = Math.floor((duration - 3600 * hours) / 60);
-    seconds = Math.floor((duration - 3600 * hours - 60 * minutes) % 60);
-    
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-    
-    return minutes + ":" + seconds;
-    }
 
 export let NowPlayingPlayer = (props) => {
     const [volume, setVolume] = useState(20);
-    const [newCurrent, setNewCurrent] = useState(0)
+    const [newCurrent, setNewCurrent] = useState(0);
+    const [key, setKey] = useState('home');
 
     useEffect(() => {
         if (props.currentTime) audio.currentTime = newCurrent
     }, [newCurrent]);
     
     let album_photo = props.track?.album?.photo || img_album;
-    const [key, setKey] = useState('home');
+    
     return(
         <div className="player col-xxl-3 col-lg-5 ps-3">
             <div className="wrapper ">
@@ -50,7 +40,7 @@ export let NowPlayingPlayer = (props) => {
                                     <div className='line w-75'>
                                         <div className='second w-100'>
                                             <span className="w-100">
-                                            {props.track?.name|| 'Track Name'  }
+                                                {props.track?.name|| 'Track Name'  }
                                             </span>
                                         </div>
                                     </div>
@@ -77,16 +67,17 @@ export let NowPlayingPlayer = (props) => {
         
                                     <div className="slider-container d-flex flex-column w-25" >
                                         <div className="d-flex justify-content-between">
-                                            <FontAwesomeIcon icon={faVolumeDown} className="text-secondary"/><FontAwesomeIcon icon={faVolumeUp} className="text-secondary"/>
+                                            <FontAwesomeIcon icon={faVolumeDown} className="text-secondary"/>
+                                            <FontAwesomeIcon icon={faVolumeUp} className="text-secondary"/>
                                         </div>
         
                                         <input type='range' min={1} max='99' value={volume} className="volume-slider cursor-pointer"
                                                onChange={(e) => {
                                                    setVolume(e.target.value);
-                                                   if (store.getState()?.player?.track) store.dispatch(actionFullSetVolume(volume)) }}/>
+                                                   if (store.getState()?.player?.track) store.dispatch(actionFullSetVolume(volume)) 
+                                        }}/>
                                     </div>
                                 </div>
-        
                             </div>
         
                             <div className="buttons">
@@ -121,17 +112,13 @@ export let NowPlayingPlayer = (props) => {
                                     <FontAwesomeIcon icon={faRepeat} className={props.repeat === 1 ? 'fa-1x text-white-50 cursor-pointer' : 'fa-1x text-primary cursor-pointer'}
                                                      onClick={() => (props.repeat === 1 ? store.dispatch(actionSetRepeat(2)) : store.dispatch(actionSetRepeat(1)))}/>
                                 </div>
-        
                             </div>
                         </div>
-        
                     </Tab>
                     <Tab className="text-white bg-dark playing-list" tabClassName="text-white bg-dark playing-list"  eventKey="profile" title="Queue">
                         {store.getState().player?.playlist && <CTrackList/>}
                     </Tab>
                 </Tabs>
-        
-                
             </div>
         </div>)
 }

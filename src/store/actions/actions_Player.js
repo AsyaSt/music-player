@@ -1,4 +1,4 @@
-import { audio } from "../../components/Tracks";
+import { audio } from "../../components/Track";
 import { store } from "../store";
 
 const actionPlay = () => ({type:'PLAY'})
